@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#cde5e8"
+    tools:context=".WalletActivity">
+
+    <TextView
+        android:id="@+id/balanceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Your Balance"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        android:transitionName="logo_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/balanceCount"
+        android:layout_width="160dp"
+        android:layout_height="114dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="0€"
+        android:textAlignment="center"
+        android:textSize="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/addBalanceBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balanceTitle" />
+
+    <Button
+        android:id="@+id/addBalanceBtn"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Add balance"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/addEditCardsBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/addEditCardsBtn"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="56dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Add/Edit cards"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
