@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUp"
+    tools:context=".SignUpActivity"
     android:orientation="vertical"
     android:background="#cde5e8"
     android:padding="20dp">
@@ -40,7 +40,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="Email"
             android:layout_marginTop="-5dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -56,7 +56,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="Password"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -71,7 +71,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="Confirm your password"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
