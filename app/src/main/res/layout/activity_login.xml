@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Login"
+    android:orientation="vertical"
+    android:background="#cde5e8"
+    android:padding="40dp">
+
+    <ImageView
+        android:id="@+id/logo_image"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:src="@drawable/logo"
+        android:transitionName="logo_image" />
+
+    <TextView
+        android:id="@+id/loginText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Welcome to Aloha Lot"
+        android:textSize="25sp"
+        android:transitionName="logo_text"
+        android:textAlignment="center"
+        />
+
+    <TextView
+        android:id="@+id/SignInTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Sign in to continue"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="vertical">
+
+
+        <!--email box-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--password box-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            app:passwordToggleEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                 android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/getInBtn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="@color/blue"
+            android:text="GET IN!"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/signup_screen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="5dp"
+            android:background="#00000000"
+            android:elevation="0dp"
+            android:text="NEW USER? SIGN UP!"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textColor="#000"/>
+
+    </LinearLayout>
+
+</LinearLayout>
