@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login"
+    tools:context=".LoginActivity"
     android:orientation="vertical"
     android:background="#cde5e8"
     android:padding="40dp">
@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/logo_image"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:src="@drawable/logo"
         android:transitionName="logo_image" />
 
@@ -23,6 +23,7 @@
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Welcome to Aloha Lot"
         android:textSize="25sp"
+        android:layout_marginTop="-10dp"
         android:transitionName="logo_text"
         android:textAlignment="center"
         />
@@ -31,7 +32,7 @@
         android:id="@+id/SignInTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="-10dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Sign in to continue"
         android:textAlignment="center"
@@ -41,7 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="0dp"
         android:orientation="vertical">
 
 
@@ -49,7 +49,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+
             android:hint="Email"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -63,23 +64,23 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="Password"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                 android:inputType="textPassword"/>
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/getInBtn"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="5dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="25dp"
             android:layout_marginBottom="5dp"
             android:backgroundTint="@color/blue"
             android:text="GET IN!"
