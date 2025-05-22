@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import com.example.alohalotapp.WalletActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

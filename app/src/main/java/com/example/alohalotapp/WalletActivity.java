@@ -1,12 +1,13 @@
+package com.example.alohalotapp;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +19,8 @@ public class WalletActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_wallet);
 
         Button addBalanceBtn = findViewById(R.id.addBalanceBtn);
@@ -27,46 +29,52 @@ public class WalletActivity extends AppCompatActivity {
         addBalanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBalanceBottomSheet();
+                showBalanceOptions(view);
             }
         });
     }
 
-    private void showBalanceBottomSheet() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(WalletActivity.this);
-        View sheetView = LayoutInflater.from(getApplicationContext()).inflate(
-                R.layout.balance_bottom_sheet, null);
-        bottomSheetDialog.setContentView(sheetView);
+    private void showBalanceOptions(View anchorView) {
+        View popupView = LayoutInflater.from(this).inflate(R.layout.balance_popup, null);
+        final PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                true);
 
-        Button option5 = sheetView.findViewById(R.id.option5);
-        Button option10 = sheetView.findViewById(R.id.option10);
-        Button option15 = sheetView.findViewById(R.id.option15);
+        Button option5 = popupView.findViewById(R.id.option5);
+        Button option10 = popupView.findViewById(R.id.option10);
+        Button option15 = popupView.findViewById(R.id.option15);
 
-        option5.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                updateBalance(5);
-                bottomSheetDialog.dismiss();
+            public void onClick(View v) {
+                int amount = 0;
+                switch (v.getId()) {
+                    case R.id.option5:
+                        amount = 5;
+                        break;
+                    case R.id.option10:
+                        amount = 10;
+                        break;
+                    case R.id.option15:
+                        amount = 15;
+                        break;
+                }
+                updateBalance(amount);
+                popupWindow.dismiss();
             }
-        });
+        };
 
-        option10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateBalance(10);
-                bottomSheetDialog.dismiss();
-            }
-        });
+        option5.setOnClickListener(listener);
+        option10.setOnClickListener(listener);
+        option15.setOnClickListener(listener);
 
-        option15.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateBalance(15);
-                bottomSheetDialog.dismiss();
-            }
-        });
+        // Optional: make the popup dismiss when tapped outside
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setElevation(10);
 
-        bottomSheetDialog.show();
+        popupWindow.showAsDropDown(anchorView);
     }
 
     private void updateBalance(int amount) {
