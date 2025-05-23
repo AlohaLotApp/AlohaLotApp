@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:icon="@drawable/home_icon"
+        android:id="@+id/home"/>
+    <item android:title="Wallet"
+        android:icon="@drawable/card_icon"
+        android:id="@+id/wallet"/>
+    <item android:title="Stats"
+        android:icon="@drawable/stats_icon"
+        android:id="@+id/stats"/>
+</menu>
