@@ -59,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
                         // Save the new user under that ID
                         reference.child(userId).setValue(helperClass).addOnCompleteListener(saveTask -> {
                             if (saveTask.isSuccessful()) {
-                                // Optionally: display a success message, navigate to another screen, etc.
+
                             }
                         });
                     }
