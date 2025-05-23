@@ -1,5 +1,6 @@
 package com.example.alohalotapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,17 @@ public class WalletActivity extends AppCompatActivity {
                 showBalanceOptions(view);
             }
         });
+
+        Button addEditCards = findViewById(R.id.addEditCardsBtn);
+
+        addEditCards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WalletActivity.this, AddCardActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void showBalanceOptions(View anchorView) {
