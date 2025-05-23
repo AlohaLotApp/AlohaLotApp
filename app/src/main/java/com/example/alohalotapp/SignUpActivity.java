@@ -2,6 +2,7 @@ package com.example.alohalotapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -59,6 +60,9 @@ public class SignUpActivity extends AppCompatActivity {
                         // Save the new user under that ID
                         reference.child(userId).setValue(helperClass).addOnCompleteListener(saveTask -> {
                             if (saveTask.isSuccessful()) {
+                                Intent intent = new Intent(SignUpActivity.this, StartActivity.class);
+                                startActivity(intent);
+                                finish();
 
                             }
                         });
