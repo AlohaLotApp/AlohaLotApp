@@ -28,6 +28,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        Button createNewButton = findViewById(R.id.getInBtn);
+        createNewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,AdminMainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 

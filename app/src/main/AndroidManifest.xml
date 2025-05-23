@@ -12,6 +12,15 @@
         android:theme="@style/Theme.AlohaLotApp"
         tools:targetApi="31">
         <activity
+            android:name=".ModifyParkingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateNewParkingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".WalletActivity"
             android:exported="false" />
         <activity
