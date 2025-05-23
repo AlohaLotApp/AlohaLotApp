@@ -7,6 +7,7 @@ public class UserHelperClass {
     public UserHelperClass() {
     }
 
+    //
     public UserHelperClass(String regEmail, String regPassword, String regConfinrmPass) {
         this.regEmail = regEmail;
         this.regPassword = regPassword;
