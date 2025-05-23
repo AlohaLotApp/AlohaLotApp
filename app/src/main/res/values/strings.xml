@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AlohaLotApp</string>
+    <string-array name="vehicle_types">
+        <item>Vehicle Type</item>
+    </string-array>
+    <string-array name="duration">
+        <item>Duration</item>
+        <item>30 minutes</item>
+        <item>60 minutes</item>
+    </string-array>
 </resources>

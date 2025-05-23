@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#cde5e8"
+    tools:context=".DriverInformationPage">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="400dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:text="Enter your information to start parking!"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/driverLicense"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="40dp"
+        android:background="#cde5e8"
+        android:hint="Driver's License Number"
+        app:boxBackgroundColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cde5e8"
+            android:textSize="17sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/vehicleType"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/driverLicense" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/licensePlate"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        android:hint="License Plate Number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vehicleType">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cde5e8"
+            android:textSize="17sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneNumber"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        android:hint="Phone Number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/licensePlate">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cde5e8"
+            android:textSize="17sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/parkingDuration"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
