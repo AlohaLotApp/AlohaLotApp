@@ -13,19 +13,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import androidx.appcompat.widget.SearchView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+
 
 public class AdminMainActivity extends AppCompatActivity {
 
     ListView listView;
-    String[] names = {
-            "Parking1", "Parking2", "Parking3", "Parking4", "Parking5",
-            "Parking6", "Parking7", "Parking8", "Parking9", "Parking10",
-            "Parking11", "Parking12", "Parking13", "Parking14", "Parking15",
-            "Parking16", "Parking17", "Parking18", "Parking19", "Parking20"
-    };
-
+    ArrayList<String> names = new ArrayList<>();
     ArrayAdapter<String> arrayAdapter;
-
+    DatabaseReference parkingRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +36,8 @@ public class AdminMainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_dropdown_item_1line , names);
         listView.setAdapter(arrayAdapter);
 
+        parkingRef = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("ParkingSpaces");
 
         Button createNewButton = findViewById(R.id.createNewButton);
         createNewButton.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +52,7 @@ public class AdminMainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedName = names[position];
+                String selectedName = names.get(position);
 
                 Intent intent = new Intent(AdminMainActivity.this, ModifyParkingActivity.class);
                 intent.putExtra("parking_name", selectedName);

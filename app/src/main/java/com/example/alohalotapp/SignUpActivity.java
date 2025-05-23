@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
@@ -59,7 +60,9 @@ public class SignUpActivity extends AppCompatActivity {
                         // Save the new user under that ID
                         reference.child(userId).setValue(helperClass).addOnCompleteListener(saveTask -> {
                             if (saveTask.isSuccessful()) {
-
+                                Toast.makeText(SignUpActivity.this, "Welcome to AholaLot " + email, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SignUpActivity.this, "Something went wrong :(", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
