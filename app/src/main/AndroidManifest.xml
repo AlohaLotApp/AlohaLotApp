@@ -12,9 +12,13 @@
         android:theme="@style/Theme.AlohaLotApp"
         tools:targetApi="31">
         <activity
+            android:name=".EditCardsActivity"
+            android:exported="false"
+            android:parentActivityName=".WalletActivity" />
+        <activity
             android:name=".AddCardActivity"
             android:exported="false"
-            android:parentActivityName=".WalletActivity"/>
+            android:parentActivityName=".WalletActivity" />
         <activity
             android:name=".WalletActivity"
             android:exported="false" />

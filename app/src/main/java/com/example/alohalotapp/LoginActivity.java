@@ -20,7 +20,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         callSignUp = findViewById(R.id.signup_screen);
-        getInBtn = findViewById(R.id.getInBtn);
 
         callSignUp.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -30,19 +29,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        getInBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, WalletActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
-
-
     }
-
 
 }

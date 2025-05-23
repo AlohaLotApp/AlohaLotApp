@@ -24,8 +24,12 @@ public class WalletActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_wallet);
 
-        Button addBalanceBtn = findViewById(R.id.addBalanceBtn);
         balanceCountText = findViewById(R.id.balanceCount);
+        loadBalance();
+
+        Button addBalanceBtn = findViewById(R.id.addBalanceBtn);
+        Button addCardsBtn = findViewById(R.id.addCardsBtn);
+        Button editCardsBtn = findViewById(R.id.editCardsBtn);
 
         addBalanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,12 +38,18 @@ public class WalletActivity extends AppCompatActivity {
             }
         });
 
-        Button addEditCards = findViewById(R.id.addEditCardsBtn);
-
-        addEditCards.setOnClickListener(new View.OnClickListener() {
+        addCardsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(WalletActivity.this, AddCardActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        editCardsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WalletActivity.this, EditCardsActivity.class);
                 startActivity(intent);
             }
         });
@@ -82,16 +92,32 @@ public class WalletActivity extends AppCompatActivity {
         option10.setOnClickListener(listener);
         option15.setOnClickListener(listener);
 
-        // Optional: make the popup dismiss when tapped outside
         popupWindow.setOutsideTouchable(true);
         popupWindow.setElevation(10);
 
         popupWindow.showAsDropDown(anchorView);
     }
 
+    // Update the Balance value
     private void updateBalance(int amount) {
         balance += amount;
         balanceCountText.setText(balance + "€");
+        saveBalance();
         Toast.makeText(this, "Added €" + amount, Toast.LENGTH_SHORT).show();
     }
+
+
+    private void loadBalance() {
+        balance = getSharedPreferences("wallet_prefs", MODE_PRIVATE).getInt("balance", 0);
+        balanceCountText.setText(balance + "€");
+    }
+
+    private void saveBalance() {
+        getSharedPreferences("wallet_prefs", MODE_PRIVATE)
+                .edit()
+                .putInt("balance", balance)
+                .apply();
+    }
+
+
 }
