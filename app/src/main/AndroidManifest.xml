@@ -20,6 +20,9 @@
             android:exported="false"
             android:parentActivityName=".WalletActivity" />
         <activity
+            android:name=".StartActivity"
+            android:exported="false" />
+        <activity
             android:name=".WalletActivity"
             android:exported="false" />
         <activity

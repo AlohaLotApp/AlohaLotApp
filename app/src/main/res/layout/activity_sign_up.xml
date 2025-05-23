@@ -38,7 +38,7 @@
 
         <!--Email Box-->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email"
+            android:id="@+id/registerEmail"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Email"
@@ -54,7 +54,7 @@
 
         <!--First Password Box-->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password1"
+            android:id="@+id/registerPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Password"
@@ -69,7 +69,7 @@
 
         <!--Second Password Box-->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password2"
+            android:id="@+id/registerConfPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Confirm your password"
