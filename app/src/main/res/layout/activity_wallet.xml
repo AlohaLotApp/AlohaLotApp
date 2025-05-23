@@ -4,20 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cde5e8"
+    android:background="@color/background"
     tools:context=".WalletActivity">
 
     <TextView
         android:id="@+id/balanceTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="52dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Your Balance"
         android:textAlignment="center"
         android:textSize="34sp"
         android:transitionName="logo_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,18 +43,30 @@
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Add balance"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/addEditCardsBtn"
+        app:layout_constraintBottom_toTopOf="@+id/addCardsBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/addEditCardsBtn"
+        android:id="@+id/addCardsBtn"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="56dp"
         android:backgroundTint="@color/blue"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="Add/Edit cards"
+        android:text="Add cards"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/editCardsBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/editCardsBtn"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Edit cards"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
