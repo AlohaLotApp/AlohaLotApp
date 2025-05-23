@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "167796039331",
+    "project_id": "alohalot-e2fd9",
+    "storage_bucket": "alohalot-e2fd9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167796039331:android:8245531c8be1682461a916",
+        "android_client_info": {
+          "package_name": "com.example.alohalotapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq-UyNQhiyYfGfkHInXoMBqDuWVMgkBeY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
