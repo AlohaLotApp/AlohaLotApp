@@ -28,8 +28,8 @@ public class StartActivity extends AppCompatActivity {
                 return true;
             }
             else if (id == R.id.stats) {
-                // Intent intent = new Intent(StartActivity.this, StatsActivity.class);
-                // startActivity(intent);
+                Intent intent = new Intent(StartActivity.this, StatisticsActivity.class);
+                startActivity(intent);
                 return true;
             }
             return false;
