@@ -12,6 +12,9 @@
         android:theme="@style/Theme.AlohaLotApp"
         tools:targetApi="31">
         <activity
+            android:name=".ParkingDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditCardsActivity"
             android:exported="false"
             android:parentActivityName=".WalletActivity" />
