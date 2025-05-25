@@ -10,8 +10,8 @@
     android:padding="20dp">
 
     <ImageView
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:src="@drawable/logo" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:text="SignUp to start parking"
         android:textSize="18sp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="-5dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,9 +40,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/registerEmail"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="58dp"
             android:hint="Email"
-            android:layout_marginTop="-5dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -56,7 +55,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/registerPassword"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="58dp"
             android:hint="Password"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -71,7 +70,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/registerConfPassword"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="58dp"
             android:hint="Confirm your password"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
