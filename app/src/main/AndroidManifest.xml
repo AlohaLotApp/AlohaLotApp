@@ -49,8 +49,7 @@
             android:exported="false" />
         <activity
             android:name=".StatisticsActivity"
-            android:exported="false"
-            android:parentActivityName=".StartActivity" />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

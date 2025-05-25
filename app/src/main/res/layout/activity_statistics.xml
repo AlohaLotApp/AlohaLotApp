@@ -249,4 +249,20 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <!-- BottomNavigationView
+    To BottomNavigationView ισως σου κανει τα τελευταια πραγματα του xml να
+    μην φαινονται. δε θελω να πειραξω αυτα που εχεις κανει και επισης δε μου
+    φαινεται μεσα απο το design η οθονη ακομα κι οταν βγαζω το BottomNavigationView.
+    το μονο που εχω προσθεσει σε αυτο το αρχειο ειναι απο εδω και κατω. αντιστοιχα
+    στο .java προσθεσα την λειτουργικοτητα του στο τελος του κωδικα. -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_nav_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    
 </androidx.constraintlayout.widget.ConstraintLayout>
