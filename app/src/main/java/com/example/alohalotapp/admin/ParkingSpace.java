@@ -1,46 +1,42 @@
 package com.example.alohalotapp.admin;
 
 public class ParkingSpace {
-    public int Capacity;
-    public int CordsX;
-    public int CordsY;
+    public int capacity;
     public double latitude;
     public double longitude;
-    public int CurrentUsers;
-    public String Name;
+    public int currentUsers;
+    public String name;
 
     public ParkingSpace() {
-    }
-
-    public ParkingSpace(int capacity, int cordsX, int cordsY, int currentUsers, String name) {
-        this.Capacity = capacity;
-        this.CordsX = cordsX;
-        this.CordsY = cordsY;
-        this.CurrentUsers = currentUsers;
-        this.Name = name;
+        // Required empty constructor for Firebase
     }
 
     public ParkingSpace(int capacity, double latitude, double longitude, int currentUsers, String name) {
-        this.Capacity = capacity;
+        this.capacity = capacity;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.CurrentUsers = currentUsers;
-        this.Name = name;
+        this.currentUsers = currentUsers;
+        this.name = name;
     }
 
-    public String getName() {
-        return this.Name;
+    // Getters
+    public int getCapacity() {
+        return capacity;
     }
 
     public double getLatitude() {
-        return this.latitude;
+        return latitude;
     }
 
     public double getLongitude() {
-        return this.longitude;
+        return longitude;
     }
 
-    public int getCapacity() {
-        return this.Capacity;
+    public int getCurrentUsers() {
+        return currentUsers;
+    }
+
+    public String getName() {
+        return name;
     }
 }
