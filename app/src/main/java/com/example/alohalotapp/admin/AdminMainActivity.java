@@ -47,7 +47,6 @@ public class AdminMainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, parkingNames);
         listView.setAdapter(arrayAdapter);
 
-        // ✅ Option 1: Load using Firebase helper class (master branch)
         firebaseHelper.loadParkingNames(
                 names -> {
                     parkingNames.clear();
@@ -56,29 +55,6 @@ public class AdminMainActivity extends AppCompatActivity {
                 },
                 error -> Toast.makeText(this, "Failed to load data: " + error, Toast.LENGTH_SHORT).show()
         );
-
-        // ✅ Option 2: Load using direct Firebase reference (wallet branch)
-        parkingRef = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                .getReference("ParkingSpaces");
-
-        parkingRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                parkingNames.clear();
-                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    String name = childSnapshot.child("name").getValue(String.class);
-                    if (name != null) {
-                        parkingNames.add(name);
-                    }
-                }
-                arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(AdminMainActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         createNewButton.setOnClickListener(v -> {
             Intent intent = new Intent(AdminMainActivity.this, CreateNewParkingActivity.class);
