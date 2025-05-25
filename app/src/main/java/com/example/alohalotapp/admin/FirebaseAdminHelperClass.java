@@ -29,7 +29,7 @@ public class FirebaseAdminHelperClass {
     }
 
     public DatabaseReference getParkingSpacesRef() {
-        return getReference("ParkingSpaces");
+        return getReference("parkingspaces");
     }
 
     public void addParkingSpace(String name, double lat, double lon, int capacity, android.content.Context context) {
