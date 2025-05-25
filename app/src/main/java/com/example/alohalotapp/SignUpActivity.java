@@ -51,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
                     regConfirm.setError(null);
                 }
 
-                UserHelperClass helperClass = new UserHelperClass(email, password, confPassword);
+                UserHelperClass helperClass = new UserHelperClass(email, password);
 
                 // Count how many users already exist to create a new incremental ID (User1, User2, ...)
                 reference.get().addOnCompleteListener(task -> {
