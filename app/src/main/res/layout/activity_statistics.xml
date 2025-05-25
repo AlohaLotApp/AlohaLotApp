@@ -62,16 +62,17 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/statsImageLabel"
+                android:id="@+id/statsImageTView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:text="Overall Summary"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/cardView"
                 app:layout_constraintStart_toStartOf="@+id/cardView"
-                app:layout_constraintEnd_toEndOf="@+id/cardView" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
 
 
@@ -122,7 +123,6 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="52dp"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="Favorite Parking Spots"
@@ -130,7 +130,7 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/statsImageLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/statsImageTView" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

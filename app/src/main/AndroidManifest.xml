@@ -12,6 +12,21 @@
         android:theme="@style/Theme.AlohaLotApp"
         tools:targetApi="31">
         <activity
+            android:name=".DurationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ModifyParkingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.CreateNewParkingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.AdminMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditCardsActivity"
             android:exported="false"
             android:parentActivityName=".WalletActivity" />
@@ -32,7 +47,6 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
-
         <activity
             android:name=".StatisticsActivity"
             android:exported="false"

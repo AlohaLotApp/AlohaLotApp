@@ -1,0 +1,30 @@
+package com.example.alohalotapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DurationActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_duration);
+
+        Button button1 = findViewById(R.id.button);
+        Button button2 = findViewById(R.id.button2);
+        Button button3 = findViewById(R.id.button3);
+
+        button1.setOnClickListener(v -> openPayment(3));
+        button2.setOnClickListener(v -> openPayment(5));
+        button3.setOnClickListener(v -> openPayment(11));
+    }
+
+    private void openPayment(int amount) {
+        Intent intent = new Intent(DurationActivity.this, PaymentActivity.class);
+        intent.putExtra("amount", amount);
+        startActivity(intent);
+    }
+}

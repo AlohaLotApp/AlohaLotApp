@@ -44,6 +44,13 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = regPassword.getEditText().getText().toString();
                 String confPassword = regConfirm.getEditText().getText().toString();
 
+                if (!password.equals(confPassword)) {
+                    regConfirm.setError("Passwords do not match");
+                    return;
+                } else {
+                    regConfirm.setError(null);
+                }
+
                 UserHelperClass helperClass = new UserHelperClass(email, password, confPassword);
 
                 // Count how many users already exist to create a new incremental ID (User1, User2, ...)
@@ -61,6 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                         reference.child(userId).setValue(helperClass).addOnCompleteListener(saveTask -> {
                             if (saveTask.isSuccessful()) {
                                 Intent intent = new Intent(SignUpActivity.this, StartActivity.class);
+                                intent.putExtra("userEmail", email); //sends the email to statistics (signup -> start -> stats)
                                 startActivity(intent);
                                 finish();
 
