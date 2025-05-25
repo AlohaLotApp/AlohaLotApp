@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class WalletActivity extends AppCompatActivity {
 
     private TextView balanceCountText;
@@ -24,6 +26,27 @@ public class WalletActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_wallet);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.wallet);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                startActivity(new Intent(WalletActivity.this, StartActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
+                return true;
+            } else if (id == R.id.wallet) {
+                return true;
+            } else if (id == R.id.stats) {
+                startActivity(new Intent(WalletActivity.this, StatisticsActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
+                return true;
+            }
+            return false;
+        });
+
         balanceCountText = findViewById(R.id.balanceCount);
         loadBalance();
 
@@ -31,61 +54,44 @@ public class WalletActivity extends AppCompatActivity {
         Button addCardsBtn = findViewById(R.id.addCardsBtn);
         Button editCardsBtn = findViewById(R.id.editCardsBtn);
 
-        addBalanceBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBalanceOptions(view);
-            }
-        });
-
-        addCardsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(WalletActivity.this, AddCardActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        editCardsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(WalletActivity.this, EditCardsActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        addBalanceBtn.setOnClickListener(view -> showBalanceOptions(view));
+        addCardsBtn.setOnClickListener(view ->
+                startActivity(new Intent(WalletActivity.this, AddCardActivity.class)));
+        editCardsBtn.setOnClickListener(view ->
+                startActivity(new Intent(WalletActivity.this, EditCardsActivity.class)));
     }
 
     private void showBalanceOptions(View anchorView) {
         View popupView = LayoutInflater.from(this).inflate(R.layout.balance_popup, null);
+
+        // Set height to 100dp
+        int popupHeight = (int) (100 * getResources().getDisplayMetrics().density);
+
         final PopupWindow popupWindow = new PopupWindow(
                 popupView,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                popupHeight,
                 true);
 
         Button option5 = popupView.findViewById(R.id.option5);
         Button option10 = popupView.findViewById(R.id.option10);
         Button option15 = popupView.findViewById(R.id.option15);
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int amount = 0;
-                switch (v.getId()) {
-                    case R.id.option5:
-                        amount = 5;
-                        break;
-                    case R.id.option10:
-                        amount = 10;
-                        break;
-                    case R.id.option15:
-                        amount = 15;
-                        break;
-                }
-                updateBalance(amount);
-                popupWindow.dismiss();
+        View.OnClickListener listener = v -> {
+            int amount = 0;
+            switch (v.getId()) {
+                case R.id.option5:
+                    amount = 5;
+                    break;
+                case R.id.option10:
+                    amount = 10;
+                    break;
+                case R.id.option15:
+                    amount = 15;
+                    break;
             }
+            updateBalance(amount);
+            popupWindow.dismiss();
         };
 
         option5.setOnClickListener(listener);
@@ -94,22 +100,19 @@ public class WalletActivity extends AppCompatActivity {
 
         popupWindow.setOutsideTouchable(true);
         popupWindow.setElevation(10);
-
         popupWindow.showAsDropDown(anchorView);
     }
 
-    // Update the Balance value
     private void updateBalance(int amount) {
         balance += amount;
-        balanceCountText.setText(balance + "€");
+        balanceCountText.setText(balance + "$");
         saveBalance();
-        Toast.makeText(this, "Added €" + amount, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Added $" + amount, Toast.LENGTH_SHORT).show();
     }
-
 
     private void loadBalance() {
         balance = getSharedPreferences("wallet_prefs", MODE_PRIVATE).getInt("balance", 0);
-        balanceCountText.setText(balance + "€");
+        balanceCountText.setText(balance + "$");
     }
 
     private void saveBalance() {
@@ -118,6 +121,4 @@ public class WalletActivity extends AppCompatActivity {
                 .putInt("balance", balance)
                 .apply();
     }
-
-
 }

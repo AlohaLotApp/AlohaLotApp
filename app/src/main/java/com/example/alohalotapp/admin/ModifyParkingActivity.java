@@ -1,6 +1,7 @@
 package com.example.alohalotapp.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,13 +19,13 @@ public class ModifyParkingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_parking); // Reusing the layout
+        setContentView(R.layout.activity_create_new_parking);
 
         nameField = findViewById(R.id.parkingName);
         latField = findViewById(R.id.parkingLat);
         longField = findViewById(R.id.parkingLong);
         capacityField = findViewById(R.id.parkingCapacity);
-        updateButton = findViewById(R.id.addButton); // Same ID used, but we treat it as update
+        updateButton = findViewById(R.id.addButton);
 
         updateButton.setText("Update Parking");
 

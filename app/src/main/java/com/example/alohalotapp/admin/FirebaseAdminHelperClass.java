@@ -1,4 +1,3 @@
-// FirebaseAdminHelperClass.java
 package com.example.alohalotapp.admin;
 
 import android.util.Log;
@@ -11,9 +10,9 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+
 import java.util.ArrayList;
 import java.util.function.Consumer;
-
 
 public class FirebaseAdminHelperClass {
 
@@ -69,6 +68,9 @@ public class FirebaseAdminHelperClass {
                 ArrayList<String> names = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     String name = child.child("Name").getValue(String.class);
+                    if (name == null) {
+                        name = child.child("name").getValue(String.class);
+                    }
                     if (name != null) names.add(name);
                 }
                 onLoaded.accept(names);
@@ -80,8 +82,6 @@ public class FirebaseAdminHelperClass {
             }
         });
     }
-
-    // FirebaseAdminHelperClass.java (add to existing class)
 
     public void getParkingSpaceByName(String name, Consumer<ParkingSpaceWithId> onResult, Consumer<String> onError) {
         getParkingSpacesRef().get().addOnCompleteListener(task -> {
@@ -109,7 +109,6 @@ public class FirebaseAdminHelperClass {
                 .addOnFailureListener(e -> onError.accept(e.getMessage()));
     }
 
-    // Helper class to pair parking data with its Firebase key
     public static class ParkingSpaceWithId {
         public String id;
         public ParkingSpace space;
@@ -119,5 +118,4 @@ public class FirebaseAdminHelperClass {
             this.space = space;
         }
     }
-
 }
