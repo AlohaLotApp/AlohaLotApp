@@ -10,6 +10,9 @@ import com.example.alohalotapp.cards.Card;
 import java.util.ArrayList;
 
 public class CardDatabase {
+    private static final String WALLET_TABLE = "wallet";
+    private static final String COLUMN_BALANCE = "balance";
+
     private CardDbHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -18,6 +21,7 @@ public class CardDatabase {
         db = dbHelper.getWritableDatabase();
     }
 
+    // Insert a new card
     public long insert(String holder, String number, String expiry) {
         ContentValues values = new ContentValues();
         values.put(CardContract.CardEntry.COLUMN_NAME_HOLDER, holder);
@@ -47,6 +51,22 @@ public class CardDatabase {
                 CardContract.CardEntry.COLUMN_NAME_HOLDER + "=? AND " +
                         CardContract.CardEntry.COLUMN_NAME_NUMBER + "=?",
                 new String[]{holder, number});
+    }
+
+    // Get the wallet balance
+    public int getBalance() {
+        Cursor cursor = db.rawQuery("SELECT balance FROM wallet LIMIT 1", null);
+        int balance = 0;
+        if (cursor.moveToFirst()) {
+            balance = cursor.getInt(0);
+        }
+        cursor.close();
+        return balance;
+    }
+
+    // Update the wallet balance
+    public void setBalance(int newBalance) {
+        db.execSQL("UPDATE wallet SET balance = ?", new Object[]{newBalance});
     }
 
     public void close() {

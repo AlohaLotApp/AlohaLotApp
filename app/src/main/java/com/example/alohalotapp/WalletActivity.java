@@ -12,10 +12,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.alohalotapp.db.CardDatabase;
+
 public class WalletActivity extends AppCompatActivity {
 
     private TextView balanceCountText;
     private int balance = 0;
+    private CardDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class WalletActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wallet);
 
         balanceCountText = findViewById(R.id.balanceCount);
+        db = new CardDatabase(this); // Initialize DB
         loadBalance();
 
         Button addBalanceBtn = findViewById(R.id.addBalanceBtn);
@@ -53,7 +57,6 @@ public class WalletActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void showBalanceOptions(View anchorView) {
@@ -94,30 +97,28 @@ public class WalletActivity extends AppCompatActivity {
 
         popupWindow.setOutsideTouchable(true);
         popupWindow.setElevation(10);
-
         popupWindow.showAsDropDown(anchorView);
     }
 
-    // Update the Balance value
     private void updateBalance(int amount) {
         balance += amount;
-        balanceCountText.setText(balance + "€");
+        balanceCountText.setText(balance + "$");
         saveBalance();
-        Toast.makeText(this, "Added €" + amount, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Added $" + amount, Toast.LENGTH_SHORT).show();
     }
 
-
     private void loadBalance() {
-        balance = getSharedPreferences("wallet_prefs", MODE_PRIVATE).getInt("balance", 0);
-        balanceCountText.setText(balance + "€");
+        balance = db.getBalance();
+        balanceCountText.setText(balance + "$");
     }
 
     private void saveBalance() {
-        getSharedPreferences("wallet_prefs", MODE_PRIVATE)
-                .edit()
-                .putInt("balance", balance)
-                .apply();
+        db.setBalance(balance);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
+    }
 }
