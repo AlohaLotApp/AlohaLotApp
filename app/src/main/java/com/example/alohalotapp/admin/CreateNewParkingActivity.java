@@ -18,11 +18,14 @@ public class CreateNewParkingActivity extends AppCompatActivity {
 
     private EditText addParkingName, addLat, addLong, addCapacity;
     private Button addParking;
+    private FirebaseAdminHelperClass firebaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_parking);
+
+        firebaseHelper = new FirebaseAdminHelperClass();
 
         addParkingName = findViewById(R.id.parkingName);
         addLat = findViewById(R.id.parkingLat);
@@ -42,11 +45,14 @@ public class CreateNewParkingActivity extends AppCompatActivity {
             }
 
             try {
-                int latitude = Integer.parseInt(latStr);
-                int longitude = Integer.parseInt(longStr);
+                double latitudeDouble = Double.parseDouble(latStr);
+                double longitudeDouble = Double.parseDouble(longStr);
+                int latitudeInt = (int) latitudeDouble;
+                int longitudeInt = (int) longitudeDouble;
                 int capacity = Integer.parseInt(capStr);
 
-                addParkingSpaceToDb(name, latitude, longitude, capacity);
+                firebaseHelper.addParkingSpace(name, latitudeDouble, longitudeDouble, capacity, this);
+                addParkingSpaceToDb(name, latitudeInt, longitudeInt, capacity);
 
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Invalid number input", Toast.LENGTH_SHORT).show();
@@ -55,8 +61,6 @@ public class CreateNewParkingActivity extends AppCompatActivity {
     }
 
     private void addParkingSpaceToDb(String name, int lat, int lon, int capacity) {
-        Log.d(TAG, "Adding parking space...");
-
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
         DatabaseReference reference = rootNode.getReference("ParkingSpaces");
 
