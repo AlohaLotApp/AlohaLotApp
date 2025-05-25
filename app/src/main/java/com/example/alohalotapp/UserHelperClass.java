@@ -5,17 +5,16 @@ import java.util.Map;
 
 public class UserHelperClass {
 
-    String regEmail, regPassword, regConfinrmPass;
+    String regEmail, regPassword;
     Map<String, Integer> usageStats;  // key = parkingId, value = count
 
     public UserHelperClass() {
         usageStats = new HashMap<>();
     }
 
-    public UserHelperClass(String regEmail, String regPassword, String regConfinrmPass) {
+    public UserHelperClass(String regEmail, String regPassword) {
         this.regEmail = regEmail;
         this.regPassword = regPassword;
-        this.regConfinrmPass = regConfinrmPass;
         this.usageStats = new HashMap<>();
     }
 
@@ -33,14 +32,6 @@ public class UserHelperClass {
 
     public void setRegPassword(String regPassword) {
         this.regPassword = regPassword;
-    }
-
-    public String getRegConfinrmPass() {
-        return regConfinrmPass;
-    }
-
-    public void setRegConfinrmPass(String regConfinrmPass) {
-        this.regConfinrmPass = regConfinrmPass;
     }
 
     public Map<String, Integer> getUsageStats() { return usageStats; }
