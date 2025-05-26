@@ -83,6 +83,44 @@ public class FirebaseAdminHelperClass {
         });
     }
 
+    public void loadCoordinates(Consumer<ArrayList<String>> onLoaded, Consumer<String> onError) {
+        getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> coordinates = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Double latitude = child.child("Latitude").getValue(Double.class);
+                    Double longitude = child.child("Longitude").getValue(Double.class);
+
+                    if (latitude == null) {
+                        latitude = child.child("latitude").getValue(Double.class);
+                    }
+
+                    if (longitude == null) {
+                        longitude = child.child("longitude").getValue(Double.class);
+                    }
+
+                    StringBuilder coordinateBuilder = new StringBuilder();
+
+                    if (latitude != null && longitude != null){
+                        coordinateBuilder.append("&markers=color:red%7Clabel:P%7C");
+                        coordinateBuilder.append(latitude);
+                        coordinateBuilder.append(",");
+                        coordinateBuilder.append(longitude);
+
+                        coordinates.add(coordinateBuilder.toString());
+                    }
+                }
+                onLoaded.accept(coordinates);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onError.accept(error.getMessage());
+            }
+        });
+    }
+
     public void getParkingSpaceByName(String name, Consumer<ParkingSpaceWithId> onResult, Consumer<String> onError) {
         getParkingSpacesRef().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
