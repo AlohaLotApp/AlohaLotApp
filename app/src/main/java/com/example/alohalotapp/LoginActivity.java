@@ -44,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
                 if((emailInput).equalsIgnoreCase("admin")){
                     intent = new Intent(LoginActivity.this, AdminMainActivity.class);
                 }
+                else if((emailInput).equalsIgnoreCase("kikkat")){
+                    intent = new Intent(LoginActivity.this, DurationActivity.class);
+                }
                 else {
                     intent = new Intent(LoginActivity.this, StartActivity.class);
                 }
