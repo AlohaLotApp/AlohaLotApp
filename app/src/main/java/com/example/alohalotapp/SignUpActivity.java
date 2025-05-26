@@ -68,7 +68,6 @@ public class SignUpActivity extends AppCompatActivity {
                         reference.child(userId).setValue(helperClass).addOnCompleteListener(saveTask -> {
                             if (saveTask.isSuccessful()) {
                                 Intent intent = new Intent(SignUpActivity.this, StartActivity.class);
-                                intent.putExtra("userEmail", email); //sends the email to statistics (signup -> start -> stats)
                                 startActivity(intent);
                                 finish();
 

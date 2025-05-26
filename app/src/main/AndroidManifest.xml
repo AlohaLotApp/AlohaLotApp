@@ -52,7 +52,7 @@
             android:exported="false"
             android:parentActivityName=".StartActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
