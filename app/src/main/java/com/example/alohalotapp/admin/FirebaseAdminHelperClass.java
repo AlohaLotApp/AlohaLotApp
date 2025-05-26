@@ -32,7 +32,7 @@ public class FirebaseAdminHelperClass {
         return getReference("parkingspaces");
     }
 
-    public void addParkingSpace(String name, double lat, double lon, int capacity, android.content.Context context) {
+    public void addParkingSpace(String name, double lat, double lon, int capacity,String openTime,String closeTime,android.content.Context context) {
         DatabaseReference reference = getParkingSpacesRef();
 
         reference.get().addOnCompleteListener(task -> {
@@ -43,7 +43,7 @@ public class FirebaseAdminHelperClass {
                 }
 
                 String newParkingId = "Parking" + (count + 1);
-                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name);
+                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name , openTime, closeTime);
 
                 reference.child(newParkingId).setValue(newSpace)
                         .addOnCompleteListener(saveTask -> {
@@ -74,6 +74,44 @@ public class FirebaseAdminHelperClass {
                     if (name != null) names.add(name);
                 }
                 onLoaded.accept(names);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onError.accept(error.getMessage());
+            }
+        });
+    }
+
+    public void loadCoordinates(Consumer<ArrayList<String>> onLoaded, Consumer<String> onError) {
+        getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> coordinates = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Double latitude = child.child("Latitude").getValue(Double.class);
+                    Double longitude = child.child("Longitude").getValue(Double.class);
+
+                    if (latitude == null) {
+                        latitude = child.child("latitude").getValue(Double.class);
+                    }
+
+                    if (longitude == null) {
+                        longitude = child.child("longitude").getValue(Double.class);
+                    }
+
+                    StringBuilder coordinateBuilder = new StringBuilder();
+
+                    if (latitude != null && longitude != null){
+                        coordinateBuilder.append("&markers=color:red%7Clabel:P%7C");
+                        coordinateBuilder.append(latitude);
+                        coordinateBuilder.append(",");
+                        coordinateBuilder.append(longitude);
+
+                        coordinates.add(coordinateBuilder.toString());
+                    }
+                }
+                onLoaded.accept(coordinates);
             }
 
             @Override

@@ -24,17 +24,17 @@ public class PaymentActivity extends AppCompatActivity {
 
         amount = getIntent().getIntExtra("amount", 0);
 
-        balanceText.setText("Your balance: " + balance + " €");
-        payButton.setText("Pay " + amount + " €");
+        balanceText.setText("Your balance: " + balance + " $");
+        payButton.setText("Pay " + amount + " $");
 
         payButton.setOnClickListener(v -> {
             if (balance >= amount) {
                 balance -= amount;
                 Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show();
-                balanceText.setText("Your balance: " + balance + " €");
+                balanceText.setText("Your balance: " + balance + " $");
                 payButton.setEnabled(false);
             } else {
-                Toast.makeText(this, "Insufficient balance", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Insufficient balance. Go to wallet!", Toast.LENGTH_SHORT).show();
             }
         });
     }
