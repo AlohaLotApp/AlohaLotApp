@@ -12,6 +12,9 @@
         android:theme="@style/Theme.AlohaLotApp"
         tools:targetApi="31">
         <activity
+            android:name=".ParkingSelectionActivity"
+            android:exported="true" />
+        <activity
             android:name=".DurationActivity"
             android:exported="false" />
         <activity
@@ -60,5 +63,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
