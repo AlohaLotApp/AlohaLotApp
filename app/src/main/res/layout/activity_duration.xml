@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Please select your parking duration"
-            android:textColor="@color/black"
+            android:textColor="@color/blue"
             android:textSize="23sp"
             android:fontFamily="sans-serif-condensed" />
     </LinearLayout>
