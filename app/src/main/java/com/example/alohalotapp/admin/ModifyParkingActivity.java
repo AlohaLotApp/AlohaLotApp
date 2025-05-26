@@ -2,6 +2,7 @@ package com.example.alohalotapp.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +12,7 @@ import com.example.alohalotapp.R;
 
 public class ModifyParkingActivity extends AppCompatActivity {
 
-    private EditText nameField, latField, longField, capacityField;
+    private EditText nameField, latField, longField, capacityField, openField, closeField;
     private Button updateButton;
     private FirebaseAdminHelperClass firebaseHelper;
     private String parkingId;
@@ -25,14 +26,16 @@ public class ModifyParkingActivity extends AppCompatActivity {
         latField = findViewById(R.id.parkingLat);
         longField = findViewById(R.id.parkingLong);
         capacityField = findViewById(R.id.parkingCapacity);
+        openField = findViewById(R.id.openTime);
+        closeField = findViewById(R.id.closeTime);
         updateButton = findViewById(R.id.addButton);
 
         updateButton.setText("Update Parking");
 
         firebaseHelper = new FirebaseAdminHelperClass();
-
         String selectedName = getIntent().getStringExtra("parking_name");
 
+        // Fetch parking by name and populate fields
         firebaseHelper.getParkingSpaceByName(selectedName, result -> {
             parkingId = result.id;
             ParkingSpace space = result.space;
@@ -41,31 +44,45 @@ public class ModifyParkingActivity extends AppCompatActivity {
             latField.setText(String.valueOf(space.getLatitude()));
             longField.setText(String.valueOf(space.getLongitude()));
             capacityField.setText(String.valueOf(space.getCapacity()));
+            openField.setText(space.getOpenTime());
+            closeField.setText(space.getCloseTime());
 
-        }, error -> Toast.makeText(this, "Error: " + error, Toast.LENGTH_LONG).show());
 
-        updateButton.setOnClickListener(v -> {
-            try {
+            updateButton.setOnClickListener(v -> {
                 String name = nameField.getText().toString().trim();
-                double lat = Double.parseDouble(latField.getText().toString().trim());
-                double lon = Double.parseDouble(longField.getText().toString().trim());
-                int cap = Integer.parseInt(capacityField.getText().toString().trim());
+                String latStr = latField.getText().toString().trim();
+                String lonStr = longField.getText().toString().trim();
+                String capStr = capacityField.getText().toString().trim();
+                String openTime = openField.getText().toString().trim();
+                String closeTime = closeField.getText().toString().trim();
 
-                if (name.isEmpty()) {
-                    Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+                if (name.isEmpty() || latStr.isEmpty() || lonStr.isEmpty() || capStr.isEmpty() ||
+                        openTime.isEmpty() || closeTime.isEmpty()) {
+                    Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                ParkingSpace updated = new ParkingSpace(cap, lat, lon, 0, name);
+                try {
+                    double lat = Double.parseDouble(latStr);
+                    double lon = Double.parseDouble(lonStr);
+                    int cap = Integer.parseInt(capStr);
 
-                firebaseHelper.updateParkingSpace(parkingId, updated,
-                        () -> Toast.makeText(this, "Parking updated", Toast.LENGTH_SHORT).show(),
-                        error -> Toast.makeText(this, "Update failed: " + error, Toast.LENGTH_SHORT).show()
-                );
+                    ParkingSpace updated = new ParkingSpace(cap, lat, lon, space.getCurrentUsers(), name, openTime, closeTime);
 
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    firebaseHelper.updateParkingSpace(parkingId, updated,
+                            () -> {
+                                Toast.makeText(this, "Parking updated", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(this, AdminMainActivity.class));
+                                finish();
+                            },
+                            error -> Toast.makeText(this, "Update failed: " + error, Toast.LENGTH_SHORT).show()
+                    );
+
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }, error -> Toast.makeText(this, "Error: " + error, Toast.LENGTH_LONG).show());
     }
 }
+

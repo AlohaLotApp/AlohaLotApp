@@ -12,7 +12,7 @@ import com.example.alohalotapp.R;
 
 public class CreateNewParkingActivity extends AppCompatActivity {
 
-    private EditText addParkingName, addLat, addLong, addCapacity;
+    private EditText addParkingName, addLat, addLong, addCapacity,openTimeField,closeTimeField;
     private Button addParking;
     private FirebaseAdminHelperClass firebaseHelper;
 
@@ -29,12 +29,17 @@ public class CreateNewParkingActivity extends AppCompatActivity {
         addLong = findViewById(R.id.parkingLong);
         addCapacity = findViewById(R.id.parkingCapacity);
         addParking = findViewById(R.id.addButton);
+        openTimeField = findViewById(R.id.openTime);
+        closeTimeField = findViewById(R.id.closeTime);
+
 
         addParking.setOnClickListener(view -> {
             String name = addParkingName.getText().toString().trim();
             String latStr = addLat.getText().toString().trim();
             String longStr = addLong.getText().toString().trim();
             String capStr = addCapacity.getText().toString().trim();
+            String openTime = openTimeField.getText().toString().trim();
+            String closeTime = closeTimeField.getText().toString().trim();
 
             if (name.isEmpty() || latStr.isEmpty() || longStr.isEmpty() || capStr.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
@@ -46,7 +51,7 @@ public class CreateNewParkingActivity extends AppCompatActivity {
                 double longitude = Double.parseDouble(longStr);
                 int capacity = Integer.parseInt(capStr);
 
-                firebaseHelper.addParkingSpace(name, latitude, longitude, capacity, this);
+                firebaseHelper.addParkingSpace(name, latitude, longitude, capacity,openTime,closeTime, this);
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Invalid number input", Toast.LENGTH_SHORT).show();
             }
