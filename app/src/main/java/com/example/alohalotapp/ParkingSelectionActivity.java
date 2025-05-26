@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 public class ParkingSelectionActivity extends AppCompatActivity {
     //temporary
     private FirebaseAdminHelperClass firebaseHelper;
-    private static final String STATIC_MAP_API_KEY = "AIzaSyDYMx3JsnBl1qBY7c-AIj86duIbK7Il9B8";
+    private static final String STATIC_MAP_API_KEY = "DUMMY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
