@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class CardDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Cards.db";
-
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + CardContract.CardEntry.TABLE_NAME + " (" +
                     CardContract.CardEntry._ID + " INTEGER PRIMARY KEY," +
@@ -30,3 +29,5 @@ public class CardDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 }
+
+
