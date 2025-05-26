@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".StartParkingActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/logo_image"
@@ -24,46 +25,48 @@
         android:textSize="25sp"
         android:layout_marginTop="-10dp"
         android:transitionName="logo_text"
-        android:textAlignment="center"
-        />
+        android:textAlignment="center" />
 
+    <!-- Full Name Field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-
+        android:layout_height="wrap_content"
         android:hint="Full Name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/name_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Plate Number Field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/platenum"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-
+        android:layout_height="wrap_content"
         android:hint="Licence Plate Number"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/platenum_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/platenum_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Phone Number Field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phonenum"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-
+        android:layout_height="wrap_content"
         android:hint="Phone Number"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/phonenum_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phonenum_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
