@@ -54,7 +54,6 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:parentActivityName=".StartActivity"
             android:name=".StatisticsActivity"
             android:exported="false" />
         <activity
