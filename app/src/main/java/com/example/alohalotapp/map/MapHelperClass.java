@@ -24,9 +24,12 @@ public class MapHelperClass {
         if (instance == null)
             instance = new MapHelperClass(map);
         else
-            //AYTO EDO EINAI TO ERROR
-            map.instance = instance;
+            instance.setMap(map);
         return instance;
+    }
+
+    public void setMap(ImageView map) {
+        this.map = map;
     }
 
     public void addMarkers(Context context){
