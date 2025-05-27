@@ -16,8 +16,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.time.Duration;
-
 public class LoginActivity extends AppCompatActivity {
 
     Button callSignUp;
@@ -67,12 +65,9 @@ public class LoginActivity extends AppCompatActivity {
                             if (emailInput.equalsIgnoreCase(dbEmail)){
                                 found = true;
                                 if (passwordInput.equalsIgnoreCase(dbPassword)){
-                                    if(emailInput.equalsIgnoreCase("admin")) {
+                                    if(emailInput.equalsIgnoreCase("admin")){
                                         Intent intent = new Intent(LoginActivity.this, AdminMainActivity.class);
                                         startActivity(intent);
-                                    }else if(emailInput.equalsIgnoreCase("kitkat")){
-                                            Intent intent = new Intent(LoginActivity.this, DurationActivity.class);
-                                            startActivity(intent);
                                     } else {
                                         Intent intent = new Intent(LoginActivity.this, StartActivity.class);
                                         startActivity(intent);
