@@ -15,6 +15,27 @@
             android:name=".ParkingDetailsActivity"
             android:exported="false" />
         <activity
+            android:name=".StartParkingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ParkingSelectionActivity"
+            android:exported="true" />
+        <activity
+            android:name=".DurationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ModifyParkingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.CreateNewParkingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.AdminMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditCardsActivity"
             android:exported="false"
             android:parentActivityName=".WalletActivity" />
@@ -36,7 +57,10 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".StatisticsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
