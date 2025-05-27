@@ -42,7 +42,8 @@
                 android:id="@+id/cardNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="16" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Expiration Date and CVC in same row -->
@@ -83,7 +84,8 @@
                     android:id="@+id/cvc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberPassword" />
+                    android:inputType="numberPassword"
+                    android:maxLength="3" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
