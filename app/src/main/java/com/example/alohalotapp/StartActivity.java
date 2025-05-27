@@ -23,6 +23,7 @@ public class StartActivity extends AppCompatActivity {
 
         openMapbtn.setOnClickListener( v->{
             Intent mapIntent  = new Intent(StartActivity.this, ParkingSelectionActivity.class);
+            mapIntent.putExtra("userEmail", userEmail);
             startActivity(mapIntent);
         });
 

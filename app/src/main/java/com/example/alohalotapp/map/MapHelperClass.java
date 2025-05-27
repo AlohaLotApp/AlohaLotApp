@@ -23,6 +23,8 @@ public class MapHelperClass {
     public static MapHelperClass getInstance(ImageView map){
         if (instance == null)
             instance = new MapHelperClass(map);
+        else
+            instance.map = map;
         return instance;
     }
 
