@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso;
 
 public class MapHelperClass {
     private static MapHelperClass instance;
-    private static final String STATIC_MAP_API_KEY = "AIzaSyC3MKrQF3FWy5IAyI1JXbgKaiMv-Thyd2o";
+    private static final String STATIC_MAP_API_KEY = "AIzaSyDN1edvlQjSdtFq8oH3jT2msvcrbg6_EYU";
     private FirebaseAdminHelperClass firebaseHelper;
     private ImageView map;
 
