@@ -19,6 +19,14 @@ public class StartActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_start);
 
+        Button openMapbtn = findViewById(R.id.openMapBtn);
+
+        openMapbtn.setOnClickListener( v->{
+            Intent mapIntent  = new Intent(StartActivity.this, ParkingSelectionActivity.class);
+            mapIntent.putExtra("userEmail", userEmail);
+            startActivity(mapIntent);
+        });
+
         Intent intentSignUp = getIntent();
         if (intentSignUp != null) {
             userEmail = intentSignUp.getStringExtra("userEmail");
