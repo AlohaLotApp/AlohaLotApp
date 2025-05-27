@@ -6,16 +6,49 @@ import java.util.Map;
 public class UserHelperClass {
 
     String regEmail, regPassword;
-    Map<String, Integer> usageStats;  // key = parkingId, value = count
+    Map<String, Integer> usageStats;
+    int points;
+
+    double amountSpent;
+
+    int totalParkings;
 
     public UserHelperClass() {
-        usageStats = new HashMap<>();
     }
 
-    public UserHelperClass(String regEmail, String regPassword) {
+    public UserHelperClass(String regEmail, String regPassword, int points, double amountSpent, int totalParkings) {
         this.regEmail = regEmail;
         this.regPassword = regPassword;
         this.usageStats = new HashMap<>();
+        this.points = points;
+        this.amountSpent = amountSpent;
+        this.totalParkings = totalParkings;
+    }
+
+    public int getTotalParkings() {
+        return totalParkings;
+    }
+
+    public void setTotalParkings(int totalParkings) {
+        this.totalParkings = totalParkings;
+    }
+
+    public double getAmountSpent() {
+        return amountSpent;
+    }
+
+    public void setAmountSpent(double amountSpent) {
+        this.amountSpent = amountSpent;
+    }
+
+
+    // getter και setter για το points
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public String getRegEmail() {

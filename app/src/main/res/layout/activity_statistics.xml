@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:text="Overall Summary"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/cardView"
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="52dp"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:text="Favorite Parking Spots"
+                android:text="Top 5 Parking Spots"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -140,7 +140,7 @@
                 android:layout_marginTop="10dp"
                 android:indeterminate="false"
                 android:max="100"
-                android:progress="45"
+                android:progress="0"
                 android:progressDrawable="@drawable/custom_progress_drawable"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +227,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:text=" points to get your reward!"
+                android:text=" points to get +5$ as a reward!"
                 app:layout_constraintStart_toEndOf="@+id/restPoints"
                 app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
@@ -243,7 +243,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-
+            <Button
+                android:id="@+id/rewardBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Get Reward "
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -255,14 +264,14 @@
     φαινεται μεσα απο το design η οθονη ακομα κι οταν βγαζω το BottomNavigationView.
     το μονο που εχω προσθεσει σε αυτο το αρχειο ειναι απο εδω και κατω. αντιστοιχα
     στο .java προσθεσα την λειτουργικοτητα του στο τελος του κωδικα. -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_nav_menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-    
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottomNavigationView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="?android:attr/windowBackground"-->
+<!--        app:menu="@menu/bottom_nav_menu"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
