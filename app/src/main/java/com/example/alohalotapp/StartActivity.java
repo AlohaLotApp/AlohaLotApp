@@ -28,6 +28,7 @@ public class StartActivity extends AppCompatActivity {
             startActivity(mapIntent);
         });
 
+
         Intent intentSignUp = getIntent();
         if (intentSignUp != null) {
             userEmail = intentSignUp.getStringExtra("userEmail");
