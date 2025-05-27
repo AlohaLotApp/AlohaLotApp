@@ -40,10 +40,26 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     private void saveCardDetails() {
-        String cardNumber = cardNumberEditText.getText().toString();
-        String expirationDate = expirationDateEditText.getText().toString();
-        String cvc = cvcEditText.getText().toString();
-        String cardholderName = cardholderNameEditText.getText().toString();
+        String cardNumber = cardNumberEditText.getText().toString().trim();
+        String expirationDate = expirationDateEditText.getText().toString().trim();
+        String cvc = cvcEditText.getText().toString().trim();
+        String cardholderName = cardholderNameEditText.getText().toString().trim();
+
+        // Check if any field is empty
+        if (cardNumber.isEmpty() || expirationDate.isEmpty() || cvc.isEmpty() || cardholderName.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (cardNumber.length() != 16) {
+            Toast.makeText(this, "Card number must be 16 digits", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (cvc.length() != 3) {
+            Toast.makeText(this, "CVC must be 3 digits", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         CardDatabase db = new CardDatabase(this);
         db.insert(cardholderName, cardNumber, expirationDate);
