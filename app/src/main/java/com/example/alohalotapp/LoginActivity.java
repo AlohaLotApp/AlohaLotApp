@@ -65,6 +65,12 @@ public class LoginActivity extends AppCompatActivity {
                             if (emailInput.equalsIgnoreCase(dbEmail)){
                                 found = true;
                                 if (passwordInput.equalsIgnoreCase(dbPassword)){
+
+                                    String userId = userSnapshot.getKey();
+
+                                    SessionManager sessionManager = new SessionManager(LoginActivity.this);
+                                    sessionManager.saveUserId(userId);
+
                                     if(emailInput.equalsIgnoreCase("admin")){
                                         Intent intent = new Intent(LoginActivity.this, AdminMainActivity.class);
                                         startActivity(intent);
@@ -72,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Intent intent = new Intent(LoginActivity.this, StartActivity.class);
                                         startActivity(intent);
                                     }
+                                    finish();
                                 } else {
                                     Toast.makeText(LoginActivity.this, "Wrong Password!",Toast.LENGTH_SHORT).show();
                                 }
