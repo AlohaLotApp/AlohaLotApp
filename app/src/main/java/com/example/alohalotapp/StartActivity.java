@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -18,7 +19,7 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_start);
-<<<<<<<<< Temporary merge branch 1
+
         Button openMapbtn = findViewById(R.id.openMapBtn);
 
         openMapbtn.setOnClickListener( v->{
@@ -26,8 +27,7 @@ public class StartActivity extends AppCompatActivity {
             mapIntent.putExtra("userEmail", userEmail);
             startActivity(mapIntent);
         });
-=========
->>>>>>>>> Temporary merge branch 2
+
 
         Intent intentSignUp = getIntent();
         if (intentSignUp != null) {

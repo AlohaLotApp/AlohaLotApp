@@ -68,6 +68,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
                     rewardButton.setVisibility(View.GONE);
                     pointsProgressBar.setProgress(0);
+                    pointsTextView.setText("0");
+                    userRef.child("points").setValue(0);
 
                     SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
                     int currentBalance = prefs.getInt("balance", 0);
