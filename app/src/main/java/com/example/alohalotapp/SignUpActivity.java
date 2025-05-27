@@ -58,6 +58,29 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = regPassword.getEditText().getText().toString();
                 String confPassword = regConfirm.getEditText().getText().toString();
 
+                //έλεγχος για το αν τα πεδία είναι συμπληρωμένα
+                if (email.isEmpty()) {
+                    regEmail.setError("Email is required");
+                    return;
+                } else {
+                    regEmail.setError(null);
+                }
+
+                if (password.isEmpty()) {
+                    regPassword.setError("Password is required");
+                    return;
+                } else {
+                    regPassword.setError(null);
+                }
+
+                if (confPassword.isEmpty()) {
+                    regConfirm.setError("Please confirm your password");
+                    return;
+                } else {
+                    regConfirm.setError(null);
+                }
+
+
                 // Έλεγχος αν τα password ταιριάζουν
                 if (!password.equals(confPassword)) {
                     // Αν όχι, βάζει μήνυμα λάθους στο confirm password
