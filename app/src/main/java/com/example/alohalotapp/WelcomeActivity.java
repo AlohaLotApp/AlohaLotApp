@@ -14,7 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity {
 
     // Duration (in milliseconds) that the splash screen is shown before moving to the main screen
     private static int SPLASH_SCREEN = 3000;
@@ -49,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed((new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
 
                 Pair[] pairs = new Pair[2];
                 pairs[0] = new Pair <View, String>(logo, "logo_image");
                 pairs[1] = new Pair <View, String>(welcome, "logo_text");
 
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pairs);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(WelcomeActivity.this, pairs);
                 startActivity(intent, options.toBundle());
             }
         }),SPLASH_SCREEN);

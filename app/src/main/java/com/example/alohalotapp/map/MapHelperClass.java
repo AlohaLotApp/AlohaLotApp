@@ -23,7 +23,13 @@ public class MapHelperClass {
     public static MapHelperClass getInstance(ImageView map){
         if (instance == null)
             instance = new MapHelperClass(map);
+        else
+            instance.setMap(map);
         return instance;
+    }
+
+    public void setMap(ImageView map) {
+        this.map = map;
     }
 
     public void addMarkers(Context context){
