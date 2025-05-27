@@ -237,7 +237,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:text="points to get +5$ as a reward!"
+                android:text=" points to get +5$ as a reward!"
                 app:layout_constraintStart_toEndOf="@+id/restPoints"
                 app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
