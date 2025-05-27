@@ -69,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 // Δημιουργεί ένα αντικείμενο UserHelperClass με το email και password για αποθήκευση
-                UserHelperClass helperClass = new UserHelperClass(email, password, 0, 0.0, 0);
+                UserHelperClass helperClass = new UserHelperClass(email, password, 100, 0.0, 0);
 
                 // Παίρνει όλα τα δεδομένα από το "users" για να μετρήσει πόσοι χρήστες υπάρχουν ήδη
                 reference.get().addOnCompleteListener(task -> {
