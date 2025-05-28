@@ -28,8 +28,11 @@ public class EditCardsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.cardRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        SessionManager sessionManager = new SessionManager(this);
+        String userId = sessionManager.getUserId();
+
         db = new CardDatabase(this);
-        cardList = db.getAllCards();
+        cardList = db.getCardsByUserId(userId);
 
         adapter = new com.example.alohalotapp.cards.CardAdapter(cardList, card -> {
             db.deleteCard(card.holder, card.number);

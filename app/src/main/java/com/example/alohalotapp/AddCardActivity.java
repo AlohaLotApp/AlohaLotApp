@@ -1,6 +1,5 @@
 package com.example.alohalotapp;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.view.View;
@@ -23,14 +22,12 @@ public class AddCardActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_add_card);
 
-        // Initialize views
         cardNumberEditText = findViewById(R.id.cardNumber);
         expirationDateEditText = findViewById(R.id.expirationDate);
         cvcEditText = findViewById(R.id.cvc);
         cardholderNameEditText = findViewById(R.id.cardholderName);
         saveCardBtn = findViewById(R.id.saveCardBtn);
 
-        // Handle save button click
         saveCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,7 +42,6 @@ public class AddCardActivity extends AppCompatActivity {
         String cvc = cvcEditText.getText().toString().trim();
         String cardholderName = cardholderNameEditText.getText().toString().trim();
 
-        // Check if any field is empty
         if (cardNumber.isEmpty() || expirationDate.isEmpty() || cvc.isEmpty() || cardholderName.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -61,11 +57,18 @@ public class AddCardActivity extends AppCompatActivity {
             return;
         }
 
+        SessionManager sessionManager = new SessionManager(this);
+        String userId = sessionManager.getUserId();
+        if (userId == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         CardDatabase db = new CardDatabase(this);
-        db.insert(cardholderName, cardNumber, expirationDate);
+        db.insert(userId, cardholderName, cardNumber, expirationDate);
         db.close();
 
         Toast.makeText(this, "Card saved successfully!", Toast.LENGTH_SHORT).show();
-        finish(); // Return to previous screen
+        finish();
     }
 }
