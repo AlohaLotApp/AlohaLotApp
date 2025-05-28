@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StartActivity"
     android:background="@color/background"
-    >
+    tools:context=".StartActivity">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -18,26 +17,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/mapImg"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="85dp"
             android:layout_gravity="top|center_horizontal"
-
-
-
-            app:srcCompat="@drawable/mapshortcut" />
+            app:srcCompat="@drawable/map_thumbnail_light"
+            app:shapeAppearanceOverlay="@style/RoundedImageStyle"
+            app:strokeColor="@color/blue"
+            app:strokeWidth="10dp"
+            android:scaleType="centerCrop" />
 
         <Button
             android:id="@+id/openMapBtn"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="310dp"
             android:backgroundTint="@color/blue"
             android:text="Open Map"
-            android:layout_marginTop="310dp"
             android:textAlignment="center"
             android:textColor="#FFFFFF" />
+
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -47,5 +49,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
