@@ -1,12 +1,22 @@
 package com.example.alohalotapp.map;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Point;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.alohalotapp.LoginActivity;
+import com.example.alohalotapp.SignUpActivity;
+import com.example.alohalotapp.StartParkingActivity;
 import com.squareup.picasso.Picasso;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class MapHelperClass {
     private static MapHelperClass instance;
@@ -30,6 +40,11 @@ public class MapHelperClass {
     }
 
     public void addMarkers(Context context) {
+        if (map == null || map.getWidth() == 0 || map.getHeight() == 0) {
+            Toast.makeText(context, "Map not ready yet.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int width = map.getWidth();
         int height = map.getHeight();
 
@@ -41,29 +56,29 @@ public class MapHelperClass {
                 return;
             }
 
+            // Fetch other data in parallel using nested lambdas
             parkingData.getCapacities(capacitiesList -> {
                 parkingData.getCurrentUsers(currentUsersList -> {
                     parkingData.getIsHandicapped(isHandicappedList -> {
                         parkingData.getOpeningHours(openingHoursList -> {
-                            StringBuilder markerBuilder = new StringBuilder();
 
+                            // Build map markers
+                            StringBuilder markerBuilder = new StringBuilder();
                             int size = Math.min(coordinatesList.size(),
                                     Math.min(capacitiesList.size(),
                                             Math.min(currentUsersList.size(), isHandicappedList.size())));
 
+                            LocalTime now = LocalTime.now();
+
                             for (int i = 0; i < size; i++) {
-                                String color = "red"; //default
-
-                                LocalTime now = LocalTime.now();
-                                LocalTime openingTime = LocalTime.parse(openingHoursList.get(i).first);
-
-                                LocalTime closingTime = LocalTime.parse(openingHoursList.get(i).second);
-
-                                boolean isOpen = !now.isBefore(openingTime) && now.isBefore(closingTime);
-
-                                System.out.println("parking" + i + ":" + isOpen);
+                                String color = "red"; // default
 
                                 try {
+                                    LocalTime openingTime = LocalTime.parse(openingHoursList.get(i).first);
+                                    LocalTime closingTime = LocalTime.parse(openingHoursList.get(i).second);
+
+                                    boolean isOpen = !now.isBefore(openingTime) && now.isBefore(closingTime);
+
                                     if (!isOpen || capacitiesList.get(i).equals(currentUsersList.get(i))) {
                                         color = "black";
                                     } else if (Boolean.TRUE.equals(isHandicappedList.get(i))) {
@@ -86,26 +101,102 @@ public class MapHelperClass {
                                     + markerBuilder
                                     + "&key=" + STATIC_MAP_API_KEY;
 
-                            Picasso.get().load(mapUrl).into(map);
+                            // Load the map image first, then add buttons after it's fully loaded
+                            Picasso.get().load(mapUrl).into(map, new com.squareup.picasso.Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    addButtons(context, coordinatesList);
+                                }
 
-                        }, error -> {
-                            Toast.makeText(context, "Failed to load opening hours.", Toast.LENGTH_LONG).show();
-                        });
+                                @Override
+                                public void onError(Exception e) {
+                                    Toast.makeText(context, "Failed to load map image", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                    }, error -> {
-                        Toast.makeText(context, "Failed to load handicapped info.", Toast.LENGTH_LONG).show();
+                        }, error -> showError(context, "opening hours"));
+                    }, error -> showError(context, "handicapped info"));
+                }, error -> showError(context, "current users"));
+            }, error -> showError(context, "capacities"));
+
+        }, error -> showError(context, "coordinates"));
+    }
+    private void showError(Context context, String dataName) {
+        Toast.makeText(context, "Failed to load " + dataName + ".", Toast.LENGTH_LONG).show();
+    }
+
+    public void addButtons(Context context, List<String> coordinatesList) {
+        ParkingData parkingData = new ParkingData();
+
+//        parkingData.getCoordinates(coordinatesList -> {
+            if (coordinatesList == null || coordinatesList.isEmpty()) {
+                Toast.makeText(context, "No coordinates found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!(map.getParent() instanceof ConstraintLayout)) {
+                Toast.makeText(context, "Map is not inside a ConstraintLayout", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ConstraintLayout layout = (ConstraintLayout) map.getParent();
+
+            double centerLat = 21.3069; //For Honolulu
+            double centerLng = -157.8583;
+            int zoom = 13;
+            int mapWidth = map.getWidth();
+            int mapHeight = map.getHeight();
+            int size = 80;
+
+            for (String coord : coordinatesList) {
+                try {
+                    String[] latLng = coord.split(",");
+                    double lat = Double.parseDouble(latLng[0].trim());
+                    double lng = Double.parseDouble(latLng[1].trim());
+
+                    Point p = CoordsToPixelsConverter.convertToPixels(
+                            centerLat, centerLng,
+                            lat, lng,
+                            zoom,
+                            mapWidth, mapHeight
+                    );
+
+                    int x = p.x;
+                    int y = p.y;
+
+                    Button button = new Button(context);
+                    button.setAlpha(0f); //invisible
+                    button.setLayoutParams(new ConstraintLayout.LayoutParams(size, size));
+                    button.setTranslationX(x - size / 2f);
+                    button.setTranslationY(y - size / 2f);
+
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, StartParkingActivity.class);
+                            // Make sure the context is an Activity
+                            if (context instanceof android.app.Activity) {
+                                context.startActivity(intent);
+                            } else {
+                                Toast.makeText(context, "Cannot start activity from this context", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     });
 
-                }, error -> {
-                    Toast.makeText(context, "Failed to load current users.", Toast.LENGTH_LONG).show();
-                });
 
-            }, error -> {
-                Toast.makeText(context, "Failed to load capacities.", Toast.LENGTH_LONG).show();
-            });
+                    int finalX = x;
+                    int finalY = y;
+//                    button.setOnClickListener(v -> Toast.makeText(context,
+//                            "Clicked at: " + finalX + ", " + finalY,
+//                            Toast.LENGTH_SHORT).show());
 
-        }, error -> {
-            Toast.makeText(context, "Failed to load coordinates: " + error, Toast.LENGTH_LONG).show();
-        });
+                    layout.addView(button);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+//        }, error -> {
+//            Toast.makeText(context, "Failed to load coordinates: " + error, Toast.LENGTH_LONG).show();
+//        });
     }
 }
