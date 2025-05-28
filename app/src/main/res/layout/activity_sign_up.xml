@@ -10,25 +10,32 @@
     android:padding="20dp">
 
     <ImageView
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:src="@drawable/logo" />
+        android:id="@+id/logo_image"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        android:transitionName="logo_image" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/loginText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
         android:text="Welcome to Aloha Lot"
         android:textSize="25sp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:layout_marginTop="-5dp" />
+        android:layout_marginTop="-10dp"
+        android:transitionName="logo_text"
+        android:textAlignment="center" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/SignInTxt"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SignUp to start parking"
-        android:textSize="18sp"
+        android:layout_marginTop="-8dp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:layout_marginTop="-5dp"/>
+        android:text="Sign up to start parking"
+        android:textAlignment="center"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
