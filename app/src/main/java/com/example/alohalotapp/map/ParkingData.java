@@ -1,5 +1,7 @@
 package com.example.alohalotapp.map;
 
+import android.util.Pair;
+
 import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
 
 import java.util.ArrayList;
@@ -26,5 +28,9 @@ public class ParkingData {
 
     public void getIsHandicapped(Consumer<ArrayList<Boolean>> onLoaded, Consumer<String> onError){
         firebaseHelper.loadIsHandicapped(onLoaded, onError);
+    }
+
+    public void getOpeningHours(Consumer<ArrayList<Pair<String, String>>> onLoaded, Consumer<String> onError){
+        firebaseHelper.loadOpeningHours(onLoaded, onError);
     }
 }
