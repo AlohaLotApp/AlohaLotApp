@@ -76,12 +76,14 @@ public class StatisticsActivity extends AppCompatActivity {
                     userRef.child("points").setValue(0);
 
                     SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
-                    int currentBalance = prefs.getInt("balance", 0);
+                    int currentBalance = prefs.getInt("balance_" + userId, 0);
+
                     int rewardPoints = 5;
 
                     int newBalance = currentBalance + rewardPoints;
 
-                    prefs.edit().putInt("balance", newBalance).apply();
+                    prefs.edit().putInt("balance_" + userId, newBalance).apply();
+
 
                     Toast.makeText(this, "Added " + rewardPoints + "$ to your wallet!", Toast.LENGTH_SHORT).show();
                 });
