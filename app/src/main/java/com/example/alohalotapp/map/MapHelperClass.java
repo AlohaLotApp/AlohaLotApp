@@ -1,26 +1,22 @@
 package com.example.alohalotapp.map;
 
-import android.app.Activity;
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.alohalotapp.ParkingSelectionActivity;
 import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
 import com.squareup.picasso.Picasso;
 
 public class MapHelperClass {
     private static MapHelperClass instance;
-    private static final String STATIC_MAP_API_KEY = "AIzaSyDN1edvlQjSdtFq8oH3jT2msvcrbg6_EYU";
-    private FirebaseAdminHelperClass firebaseHelper;
+    private static final String STATIC_MAP_API_KEY = "NO STEALING TODAY";
     private ImageView map;
 
-    private MapHelperClass(ImageView map){
+    private MapHelperClass(ImageView map) {
         this.map = map;
-        this.firebaseHelper = new FirebaseAdminHelperClass();
     }
 
-    public static MapHelperClass getInstance(ImageView map){
+    public static MapHelperClass getInstance(ImageView map) {
         if (instance == null)
             instance = new MapHelperClass(map);
         else
@@ -32,30 +28,67 @@ public class MapHelperClass {
         this.map = map;
     }
 
-    public void addMarkers(Context context){
+    public void addMarkers(Context context) {
         int width = map.getWidth();
         int height = map.getHeight();
 
-        firebaseHelper.loadCoordinates(coordinatesList -> {
-            StringBuilder markerBuilder = new StringBuilder();
-            markerBuilder.append("&markers=color:red%7Clabel:P%7C");
+        ParkingData parkingData = new ParkingData();
 
-            for (int i = 0; i < coordinatesList.size(); i++) {
-                String marker = coordinatesList.get(i).replace("&markers=color:red%7Clabel:P%7C", "");
-                markerBuilder.append(marker);
-                if (i != coordinatesList.size() - 1) {
-                    markerBuilder.append("%7C");
-                }
+        parkingData.getCoordinates(coordinatesList -> {
+            if (coordinatesList == null || coordinatesList.isEmpty()) {
+                Toast.makeText(context, "No parking spots to show on map.", Toast.LENGTH_LONG).show();
+                return;
             }
 
-            String mapUrl = "https://maps.googleapis.com/maps/api/staticmap"
-                    + "?center=Honolulu,United+States"
-                    + "&zoom=13"
-                    + "&size=" + width + "x" + height
-                    + markerBuilder
-                    + "&key=" + STATIC_MAP_API_KEY;
+            parkingData.getCapacities(capacitiesList -> {
+                parkingData.getCurrentUsers(currentUsersList -> {
+                    parkingData.getIsHandicapped(isHandicappedList -> {
 
-            Picasso.get().load(mapUrl).into(map);
+                        StringBuilder markerBuilder = new StringBuilder();
+
+                        int size = Math.min(coordinatesList.size(),
+                                Math.min(capacitiesList.size(),
+                                        Math.min(currentUsersList.size(), isHandicappedList.size())));
+
+                        for (int i = 0; i < size; i++) {
+                            String color = "red"; // default
+
+                            try {
+                                if (capacitiesList.get(i).equals(currentUsersList.get(i))) {
+                                    color = "gray"; // full takes priority
+                                } else if (Boolean.TRUE.equals(isHandicappedList.get(i))) {
+                                    color = "blue"; // only if not full
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            markerBuilder.append("&markers=color:")
+                                    .append(color)
+                                    .append("%7Clabel:P%7C")
+                                    .append(coordinatesList.get(i));
+                        }
+
+                        String mapUrl = "https://maps.googleapis.com/maps/api/staticmap"
+                                + "?center=Honolulu,United+States"
+                                + "&zoom=13"
+                                + "&size=" + width + "x" + height
+                                + markerBuilder
+                                + "&key=" + STATIC_MAP_API_KEY;
+
+                        Picasso.get().load(mapUrl).into(map);
+
+                    }, error -> {
+                        Toast.makeText(context, "Failed to load handicapped info.", Toast.LENGTH_LONG).show();
+                    });
+
+                }, error -> {
+                    Toast.makeText(context, "Failed to load current users.", Toast.LENGTH_LONG).show();
+                });
+
+            }, error -> {
+                Toast.makeText(context, "Failed to load capacities.", Toast.LENGTH_LONG).show();
+            });
 
         }, error -> {
             Toast.makeText(context, "Failed to load coordinates: " + error, Toast.LENGTH_LONG).show();
