@@ -1,6 +1,7 @@
 package com.example.alohalotapp.admin;
 
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import com.example.alohalotapp.map.ParkingData;
@@ -75,6 +76,38 @@ public class FirebaseAdminHelperClass {
                     if (name != null) names.add(name);
                 }
                 onLoaded.accept(names);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onError.accept(error.getMessage());
+            }
+        });
+    }
+
+    public void loadOpeningHours(Consumer<ArrayList<Pair<String, String>>> onLoaded, Consumer<String> onError) {
+        getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Pair<String, String>> openingHours = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    String openingTime = child.child("OpenTime").getValue(String.class);
+                    if (openingTime == null) {
+                        openingTime = child.child("openTime").getValue(String.class);
+                    }
+
+                    String closingTime = child.child("CloseTime").getValue(String.class);
+                    if (closingTime == null) {
+                        closingTime = child.child("closeTime").getValue(String.class);
+                    }
+
+                    if (openingTime != null && closingTime != null) {
+                        openingHours.add(new Pair<>(openingTime, closingTime));
+                    }
+                }
+
+                onLoaded.accept(openingHours);
             }
 
             @Override
