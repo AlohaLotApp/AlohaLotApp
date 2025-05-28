@@ -9,4 +9,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#223A5E</color>
     <color name="background">#cde5e8</color>
+    <color name="color1">#FF5722</color> <!-- ζεστό πορτοκαλί -->
+    <color name="color2">#4CAF50</color> <!-- πράσινο -->
+    <color name="color3">#00BCD4</color> <!-- τιρκουάζ -->
+    <color name="color4">#FFC107</color> <!-- κίτρινο -->
+    <color name="color5">#9C27B0</color> <!-- μοβ -->
+    <color name="color6">#3F51B5</color> <!-- μπλε -->
+    <color name="color7">#795548</color> <!-- καφέ -->
+    <color name="color8">#009688</color> <!-- σκούρο τιρκουάζ -->
+
 </resources>

@@ -32,7 +32,7 @@
         android:id="@+id/SignInTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-10dp"
+        android:layout_marginTop="-8dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Sign in to continue"
         android:textAlignment="center"
@@ -75,7 +75,7 @@
             android:id="@+id/password_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"/>
+            android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

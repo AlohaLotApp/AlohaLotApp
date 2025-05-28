@@ -18,19 +18,29 @@ public class CardDatabase {
         db = dbHelper.getWritableDatabase();
     }
 
-    public long insert(String holder, String number, String expiry) {
+    // Insert a card for a specific user
+    public long insert(String userId, String holder, String number, String expiry) {
         ContentValues values = new ContentValues();
+        values.put("user_id", userId);
         values.put(CardContract.CardEntry.COLUMN_NAME_HOLDER, holder);
         values.put(CardContract.CardEntry.COLUMN_NAME_NUMBER, number);
         values.put(CardContract.CardEntry.COLUMN_NAME_EXPIRY, expiry);
         return db.insert(CardContract.CardEntry.TABLE_NAME, null, values);
     }
 
-    // Retrieve all cards
-    public ArrayList<Card> getAllCards() {
+    // Retrieve cards for the given user ID
+    public ArrayList<Card> getCardsByUserId(String userId) {
         ArrayList<Card> cardList = new ArrayList<>();
-        Cursor cursor = db.query(CardContract.CardEntry.TABLE_NAME,
-                null, null, null, null, null, null);
+        Cursor cursor = db.query(
+                CardContract.CardEntry.TABLE_NAME,
+                null,
+                "user_id=?",
+                new String[]{userId},
+                null,
+                null,
+                null
+        );
+
         while (cursor.moveToNext()) {
             String holder = cursor.getString(cursor.getColumnIndexOrThrow(CardContract.CardEntry.COLUMN_NAME_HOLDER));
             String number = cursor.getString(cursor.getColumnIndexOrThrow(CardContract.CardEntry.COLUMN_NAME_NUMBER));
@@ -41,7 +51,7 @@ public class CardDatabase {
         return cardList;
     }
 
-    // Delete card by holder and number
+    // Delete a specific card
     public void deleteCard(String holder, String number) {
         db.delete(CardContract.CardEntry.TABLE_NAME,
                 CardContract.CardEntry.COLUMN_NAME_HOLDER + "=? AND " +

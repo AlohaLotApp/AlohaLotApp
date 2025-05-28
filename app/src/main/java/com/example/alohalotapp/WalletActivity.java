@@ -1,6 +1,7 @@
 package com.example.alohalotapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ public class WalletActivity extends AppCompatActivity {
 
     private TextView balanceCountText;
     private int balance = 0;
+    private SessionManager sessionManager;
+    private String userId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,16 @@ public class WalletActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.wallet);
+
+        sessionManager = new SessionManager(this);
+        userId = sessionManager.getUserId();
+
+        if (userId == null) {
+            // Optional: handle error if user is not logged in
+            Toast.makeText(this, "No user logged in!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -110,14 +124,15 @@ public class WalletActivity extends AppCompatActivity {
     }
 
     private void loadBalance() {
-        balance = getSharedPreferences("wallet_prefs", MODE_PRIVATE).getInt("balance", 0);
+        SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
+        balance = prefs.getInt("balance_" + userId, 0);
         balanceCountText.setText(balance + "$");
     }
 
     private void saveBalance() {
         getSharedPreferences("wallet_prefs", MODE_PRIVATE)
                 .edit()
-                .putInt("balance", balance)
+                .putInt("balance_" + userId, balance)
                 .apply();
     }
 }

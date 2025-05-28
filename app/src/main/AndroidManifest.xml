@@ -16,7 +16,8 @@
             android:exported="false" />
         <activity
             android:name=".StartParkingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ParkingSelectionActivity" />
         <activity
             android:name=".ParkingSelectionActivity"
             android:exported="true" />
