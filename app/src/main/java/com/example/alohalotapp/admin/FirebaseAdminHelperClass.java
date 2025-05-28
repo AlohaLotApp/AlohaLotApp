@@ -1,8 +1,10 @@
 package com.example.alohalotapp.admin;
 
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
+import com.example.alohalotapp.map.ParkingData;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -32,7 +34,7 @@ public class FirebaseAdminHelperClass {
         return getReference("parkingspaces");
     }
 
-    public void addParkingSpace(String name, double lat, double lon, int capacity,String openTime,String closeTime,android.content.Context context) {
+    public void addParkingSpace(String name, double lat, double lon, int capacity, String openTime, String closeTime, android.content.Context context) {
         DatabaseReference reference = getParkingSpacesRef();
 
         reference.get().addOnCompleteListener(task -> {
@@ -43,7 +45,7 @@ public class FirebaseAdminHelperClass {
                 }
 
                 String newParkingId = "Parking" + (count + 1);
-                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name , openTime, closeTime);
+                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name, openTime, closeTime);
 
                 reference.child(newParkingId).setValue(newSpace)
                         .addOnCompleteListener(saveTask -> {
@@ -83,6 +85,38 @@ public class FirebaseAdminHelperClass {
         });
     }
 
+    public void loadOpeningHours(Consumer<ArrayList<Pair<String, String>>> onLoaded, Consumer<String> onError) {
+        getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Pair<String, String>> openingHours = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    String openingTime = child.child("OpenTime").getValue(String.class);
+                    if (openingTime == null) {
+                        openingTime = child.child("openTime").getValue(String.class);
+                    }
+
+                    String closingTime = child.child("CloseTime").getValue(String.class);
+                    if (closingTime == null) {
+                        closingTime = child.child("closeTime").getValue(String.class);
+                    }
+
+                    if (openingTime != null && closingTime != null) {
+                        openingHours.add(new Pair<>(openingTime, closingTime));
+                    }
+                }
+
+                onLoaded.accept(openingHours);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onError.accept(error.getMessage());
+            }
+        });
+    }
+
     public void loadCoordinates(Consumer<ArrayList<String>> onLoaded, Consumer<String> onError) {
         getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
             @Override
@@ -102,8 +136,7 @@ public class FirebaseAdminHelperClass {
 
                     StringBuilder coordinateBuilder = new StringBuilder();
 
-                    if (latitude != null && longitude != null){
-                        coordinateBuilder.append("&markers=color:red%7Clabel:P%7C");
+                    if (latitude != null && longitude != null) {
                         coordinateBuilder.append(latitude);
                         coordinateBuilder.append(",");
                         coordinateBuilder.append(longitude);
@@ -112,6 +145,78 @@ public class FirebaseAdminHelperClass {
                     }
                 }
                 onLoaded.accept(coordinates);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onError.accept(error.getMessage());
+            }
+        });
+    }
+
+    public void loadCapacities(Consumer<ArrayList<Integer>> onLoaded, Consumer<String> onError) {
+        getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Integer> capacities = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Integer capacity = child.child("Capacity").getValue(Integer.class);
+                    if (capacity == null || capacity == 0) {
+                        capacity = child.child("capacity").getValue(Integer.class);
+                    }
+                    if (capacities != null || capacity != 0) capacities.add(capacity);
+                }
+                onLoaded.accept(capacities);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onError.accept(error.getMessage());
+            }
+        });
+    }
+
+    public void loadCurrentUsers(Consumer<ArrayList<Integer>> onLoaded, Consumer<String> onError) {
+        getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Integer> currentUsersList = new ArrayList<>();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Integer currentUsers = child.child("CurrentUsers").getValue(Integer.class);
+                    if (currentUsers == null || currentUsers == 0) {
+                        currentUsers = child.child("currentUsers").getValue(Integer.class);
+                    }
+                    if (currentUsers != null || currentUsers != 0)
+                        currentUsersList.add(currentUsers);
+                }
+                onLoaded.accept(currentUsersList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onError.accept(error.getMessage());
+            }
+        });
+    }
+
+    public void loadIsHandicapped(Consumer<ArrayList<Boolean>> onLoaded, Consumer<String> onError) {
+        getParkingSpacesRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Boolean> isHandicappedList = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Boolean isHandicapped = child.child("Handicapped").getValue(Boolean.class);
+
+                    if (isHandicapped == null) {
+                        isHandicapped = child.child("handicapped").getValue(Boolean.class);
+                    }
+
+                    // Default to false if still null
+                    isHandicappedList.add(isHandicapped != null && isHandicapped);
+                }
+
+                onLoaded.accept(isHandicappedList);
             }
 
             @Override
