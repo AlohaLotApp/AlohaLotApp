@@ -88,8 +88,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/statsImageTView" />
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart"
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/BarTop5Chart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="200dp"
@@ -109,7 +109,7 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@id/totalParksTView"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintTop_toBottomOf="@id/lineChart" />
+                app:layout_constraintTop_toBottomOf="@id/BarTop5Chart" />
 
             <TextView
                 android:id="@+id/totalParksTView"
@@ -120,7 +120,7 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/textView5"
-                app:layout_constraintTop_toBottomOf="@id/lineChart" />
+                app:layout_constraintTop_toBottomOf="@id/BarTop5Chart" />
 
             <TextView
                 android:id="@+id/textView"
