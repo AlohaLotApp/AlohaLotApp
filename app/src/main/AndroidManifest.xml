@@ -23,10 +23,12 @@
             android:exported="true" />
         <activity
             android:name=".DurationActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:parentActivityName=".StartParkingActivity" />
         <activity
             android:name=".PaymentActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:parentActivityName=".DurationActivity" />
         <activity
             android:name=".admin.ModifyParkingActivity"
             android:exported="false" />
