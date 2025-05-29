@@ -11,11 +11,13 @@ public class ParkingSpace {
 
     public String name;
 
+    public boolean handicapped;
+
     public ParkingSpace() {
         // Required empty constructor for Firebase
     }
 
-    public ParkingSpace(int capacity, double latitude, double longitude, int occupancy, String name, String openTime, String closeTime) {
+    public ParkingSpace(int capacity, double latitude, double longitude, int occupancy, String name, String openTime, String closeTime , boolean handicapped) {
         this.capacity = capacity;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -23,6 +25,7 @@ public class ParkingSpace {
         this.name = name;
         this.openTime = openTime;
         this.closeTime = closeTime;
+        this.handicapped = handicapped;
     }
 
     // Getters
@@ -45,7 +48,10 @@ public class ParkingSpace {
     public String getOpenTime() { return openTime; }
 
     public String getCloseTime() { return closeTime; }
+
     public String getName() {
         return name;
     }
+
+    public boolean getHandicapped() {return handicapped; }
 }

@@ -3,7 +3,9 @@ package com.example.alohalotapp.admin;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -13,6 +15,8 @@ import com.example.alohalotapp.R;
 public class CreateNewParkingActivity extends AppCompatActivity {
 
     private EditText addParkingName, addLat, addLong, addCapacity,openTimeField,closeTimeField;
+
+    private CheckBox handiCapped;
     private Button addParking;
     private FirebaseAdminHelperClass firebaseHelper;
 
@@ -31,6 +35,7 @@ public class CreateNewParkingActivity extends AppCompatActivity {
         addParking = findViewById(R.id.addButton);
         openTimeField = findViewById(R.id.openTime);
         closeTimeField = findViewById(R.id.closeTime);
+        handiCapped = findViewById(R.id.handicapCheckbox);
 
 
         addParking.setOnClickListener(view -> {
@@ -40,6 +45,8 @@ public class CreateNewParkingActivity extends AppCompatActivity {
             String capStr = addCapacity.getText().toString().trim();
             String openTime = openTimeField.getText().toString().trim();
             String closeTime = closeTimeField.getText().toString().trim();
+
+            boolean ishandiCapped = handiCapped.isChecked();
 
             if (name.isEmpty() || latStr.isEmpty() || longStr.isEmpty() || capStr.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
@@ -51,11 +58,24 @@ public class CreateNewParkingActivity extends AppCompatActivity {
                 double longitude = Double.parseDouble(longStr);
                 int capacity = Integer.parseInt(capStr);
 
-                firebaseHelper.addParkingSpace(name, latitude, longitude, capacity,openTime,closeTime, this);
+                firebaseHelper.addParkingSpace(name, latitude, longitude, capacity,openTime,closeTime,ishandiCapped, this);
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Invalid number input", Toast.LENGTH_SHORT).show();
             }
         });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close the activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

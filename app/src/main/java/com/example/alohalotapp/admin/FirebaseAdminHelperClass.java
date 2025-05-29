@@ -4,6 +4,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
+import com.example.alohalotapp.map.ParkingData;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -33,7 +34,9 @@ public class FirebaseAdminHelperClass {
         return getReference("parkingspaces");
     }
 
-    public void addParkingSpace(String name, double lat, double lon, int capacity,String openTime,String closeTime,android.content.Context context) {
+    public void addParkingSpace(String name, double lat, double lon, int capacity, String openTime,
+                                String closeTime,boolean handiCapped,
+                                android.content.Context context) {
         DatabaseReference reference = getParkingSpacesRef();
 
         reference.get().addOnCompleteListener(task -> {
@@ -44,7 +47,7 @@ public class FirebaseAdminHelperClass {
                 }
 
                 String newParkingId = "Parking" + (count + 1);
-                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name , openTime, closeTime);
+                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name, openTime, closeTime,handiCapped );
 
                 reference.child(newParkingId).setValue(newSpace)
                         .addOnCompleteListener(saveTask -> {
@@ -135,8 +138,7 @@ public class FirebaseAdminHelperClass {
 
                     StringBuilder coordinateBuilder = new StringBuilder();
 
-                    if (latitude != null && longitude != null){
-                        coordinateBuilder.append("&markers=color:red%7Clabel:P%7C");
+                    if (latitude != null && longitude != null) {
                         coordinateBuilder.append(latitude);
                         coordinateBuilder.append(",");
                         coordinateBuilder.append(longitude);
