@@ -72,11 +72,9 @@
 
     <Button
         android:id="@+id/NextBtn"
+        style="@style/RoundedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:backgroundTint="@color/blue"
-        android:text="Next"
-        android:textColor="#fff" />
+        android:text="Next" />
 
 </LinearLayout>

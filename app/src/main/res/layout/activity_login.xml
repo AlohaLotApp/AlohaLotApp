@@ -25,8 +25,7 @@
         android:textSize="25sp"
         android:layout_marginTop="-10dp"
         android:transitionName="logo_text"
-        android:textAlignment="center"
-        />
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/SignInTxt"
@@ -80,21 +79,16 @@
 
         <Button
             android:id="@+id/getInBtn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
+            style="@style/RoundedButton"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:backgroundTint="@color/blue"
-            android:text="GET IN!"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF" />
+            android:text="GET IN!" />
 
         <Button
             android:id="@+id/signup_screen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_margin="5dp"
             android:background="#00000000"
             android:elevation="0dp"
             android:text="NEW USER? SIGN UP!"

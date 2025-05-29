@@ -16,11 +16,8 @@
         android:layout_gravity="center_horizontal"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Enter Card Details"
-        android:textSize="25sp"
-        android:fontFamily="sans-serif-condensed-medium"
+        style="@style/SmallTitleText"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-5dp" />
 
@@ -110,11 +107,8 @@
     <!-- Save Button -->
     <Button
         android:id="@+id/saveCardBtn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="@color/blue"
-        android:text="Save"
-        android:textColor="#fff" />
+        style="@style/RoundedButton"
+        android:layout_marginTop="10dp"
+        android:text="Save" />
 
 </LinearLayout>

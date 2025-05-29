@@ -26,19 +26,16 @@
             app:srcCompat="@drawable/map_thumbnail_light"
             app:shapeAppearanceOverlay="@style/RoundedImageStyle"
             app:strokeColor="@color/blue"
-            app:strokeWidth="10dp"
+            app:strokeWidth="15dp"
             android:scaleType="centerCrop" />
 
         <Button
             android:id="@+id/openMapBtn"
+            style="@style/RoundedButton"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="310dp"
-            android:backgroundTint="@color/blue"
-            android:text="Open Map"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF" />
+            android:layout_marginTop="314dp"
+            android:text="Open Map" />
 
     </FrameLayout>
 

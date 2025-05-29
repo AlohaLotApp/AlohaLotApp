@@ -10,12 +10,8 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.alohalotapp.LoginActivity;
-import com.example.alohalotapp.SignUpActivity;
 import com.example.alohalotapp.StartParkingActivity;
 import com.squareup.picasso.Picasso;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -136,69 +132,68 @@ public class MapHelperClass {
     public void addButtons(Context context, List<String> coordinatesList) {
         ParkingData parkingData = new ParkingData();
 
-//        parkingData.getCoordinates(coordinatesList -> {
-            if (coordinatesList == null || coordinatesList.isEmpty()) {
-                Toast.makeText(context, "No coordinates found", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (coordinatesList == null || coordinatesList.isEmpty()) {
+            Toast.makeText(context, "No coordinates found", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            if (!(map.getParent() instanceof ConstraintLayout)) {
-                Toast.makeText(context, "Map is not inside a ConstraintLayout", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (!(map.getParent() instanceof ConstraintLayout)) {
+            Toast.makeText(context, "Map is not inside a ConstraintLayout", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            ConstraintLayout layout = (ConstraintLayout) map.getParent();
+        ConstraintLayout layout = (ConstraintLayout) map.getParent();
 
-            double centerLat = 21.3069; //For Honolulu
-            double centerLng = -157.8583;
-            int zoom = 13;
-            int mapWidth = map.getWidth();
-            int mapHeight = map.getHeight();
-            int size = 80;
+        double centerLat = 21.3069; //For Honolulu
+        double centerLng = -157.8583;
+        int zoom = 13;
+        int mapWidth = map.getWidth();
+        int mapHeight = map.getHeight();
+        int size = 80;
 
-            for (String coord : coordinatesList) {
-                try {
-                    String[] latLng = coord.split(",");
-                    double lat = Double.parseDouble(latLng[0].trim());
-                    double lng = Double.parseDouble(latLng[1].trim());
+        for (String coordinates : coordinatesList) {
+            try {
+                String[] latLng = coordinates.split(",");
+                double lat = Double.parseDouble(latLng[0].trim());
+                double lng = Double.parseDouble(latLng[1].trim());
 
-                    Point p = CoordsToPixelsConverter.convertToPixels(
-                            centerLat, centerLng,
-                            lat, lng,
-                            zoom,
-                            mapWidth, mapHeight
-                    );
+                Point p = CoordinatesToPixelsConverter.convertToPixels(
+                        centerLat, centerLng,
+                        lat, lng,
+                        zoom,
+                        mapWidth, mapHeight
+                );
 
-                    int x = p.x;
-                    int y = p.y;
+                int x = p.x;
+                int y = p.y;
 
-                    Button button = new Button(context);
-                    button.setAlpha(0f); //invisible
-                    button.setLayoutParams(new ConstraintLayout.LayoutParams(size, size));
-                    button.setTranslationX(x - size / 2f);
-                    button.setTranslationY(y - size / 2f);
+                Button button = new Button(context);
+                button.setAlpha(0f); //invisible
+                button.setLayoutParams(new ConstraintLayout.LayoutParams(size, size));
+                button.setTranslationX(x - size / 2f);
+                button.setTranslationY(y - size / 2f);
 
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, StartParkingActivity.class);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, StartParkingActivity.class);
 
-                            if (context instanceof android.app.Activity) {
-                                context.startActivity(intent);
-                            } else {
-                                Toast.makeText(context, "Cannot start activity from this context", Toast.LENGTH_SHORT).show();
-                            }
+                        if (context instanceof android.app.Activity) {
+                            context.startActivity(intent);
+                        } else {
+                            Toast.makeText(context, "Cannot start activity from this context", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                });
 
 
-                    int finalX = x;
-                    int finalY = y;
+                int finalX = x;
+                int finalY = y;
 
-                    layout.addView(button);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                layout.addView(button);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
     }
 }
