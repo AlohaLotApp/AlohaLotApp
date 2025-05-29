@@ -67,12 +67,17 @@ public class UserHelperClass {
         this.regPassword = regPassword;
     }
 
-    public Map<String, Integer> getUsageStats() { return usageStats; }
+    public Map<String, Integer> getUsageStats() {
+        return usageStats;
+    }
 
-    public void setUsageStats(Map<String, Integer> usageStats) { this.usageStats = usageStats; }
+    public void setUsageStats(Map<String, Integer> usageStats) {
+        this.usageStats = usageStats;
+    }
 
-    public void recordParkingUsage(String parkingId) {
-        int count = usageStats.getOrDefault(parkingId, 0);
-        usageStats.put(parkingId, count + 1);
+    // Αν θέλεις να αυξάνεις με όνομα parking:
+    public void recordParkingUsage(String parkingName) {
+        int count = usageStats.getOrDefault(parkingName, 0);
+        usageStats.put(parkingName, count + 1);
     }
 }

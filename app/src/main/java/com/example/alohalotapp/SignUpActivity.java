@@ -114,6 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 sessionManager.saveUserId(userId);
 
                                 initializeUserUsageStats(userId);
+                                initializeUserPaymentStats(userId);
 
                                 // Ξεκινάει την επόμενη δραστηριότητα (πχ αρχική οθόνη εφαρμογής)
                                 Intent intent = new Intent(SignUpActivity.this, StartActivity.class);
@@ -131,25 +132,39 @@ public class SignUpActivity extends AppCompatActivity {
         DatabaseReference parkingsRef = rootNode.getReference("parkingspaces");
         DatabaseReference userUsageStatsRef = rootNode.getReference("users").child(userId).child("usageStats");
 
-        // Πάρε όλα τα parkingId
         parkingsRef.get().addOnCompleteListener(parkingTask -> {
             if (parkingTask.isSuccessful() && parkingTask.getResult().exists()) {
                 Map<String, Object> allParkings = (Map<String, Object>) parkingTask.getResult().getValue();
 
-                // Αν δεν υπάρχουν παρκινγκ, απλά δεν κάνουμε τίποτα
                 if (allParkings == null) return;
 
-                // Αρχικοποίηση usageStats map με όλα τα parkingId και τιμή 0
                 Map<String, Integer> usageStats = new HashMap<>();
-                for (String parkingId : allParkings.keySet()) {
-                    usageStats.put(parkingId, 0);
+
+                for (Map.Entry<String, Object> entry : allParkings.entrySet()) {
+                    Map<String, Object> parkingData = (Map<String, Object>) entry.getValue();
+                    String parkingName = (String) parkingData.get("name");
+                    if (parkingName != null) {
+                        usageStats.put(parkingName, 0);
+                    }
                 }
 
-                // Αποθήκευση στο χρήστη usageStats
                 userUsageStatsRef.setValue(usageStats);
             }
         });
     }
+
+    private void initializeUserPaymentStats(String userId) {
+        DatabaseReference paymentStatsRef = rootNode.getReference("users").child(userId).child("paymentStats");
+
+        Map<String, Integer> initialPaymentStats = new HashMap<>();
+        initialPaymentStats.put("Paid3", 0);
+        initialPaymentStats.put("Paid5", 0);
+        initialPaymentStats.put("Paid11", 0);
+
+        paymentStatsRef.setValue(initialPaymentStats);
+    }
+
+
 
     // Getter μέθοδος για το userId που δημιουργήθηκε, αν χρειαστεί κάπου αλλού
     public String getUserId() {
