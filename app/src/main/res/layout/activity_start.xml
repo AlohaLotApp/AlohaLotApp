@@ -17,11 +17,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/homeTitle"
+            style="@style/BigTitleText"
+            android:text="Home" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/mapImg"
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_marginTop="85dp"
+            android:layout_marginTop="100dp"
             android:layout_gravity="top|center_horizontal"
             app:srcCompat="@drawable/map_thumbnail_light"
             app:shapeAppearanceOverlay="@style/RoundedImageStyle"
@@ -34,7 +39,7 @@
             style="@style/RoundedButton"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="314dp"
+            android:layout_marginTop="330dp"
             android:text="Open Map" />
 
     </FrameLayout>
