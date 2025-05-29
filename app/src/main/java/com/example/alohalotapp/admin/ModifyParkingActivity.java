@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -13,6 +15,7 @@ import com.example.alohalotapp.R;
 public class ModifyParkingActivity extends AppCompatActivity {
 
     private EditText nameField, latField, longField, capacityField, openField, closeField;
+    private CheckBox handiCapped;
     private Button updateButton;
     private FirebaseAdminHelperClass firebaseHelper;
     private String parkingId;
@@ -28,6 +31,7 @@ public class ModifyParkingActivity extends AppCompatActivity {
         capacityField = findViewById(R.id.parkingCapacity);
         openField = findViewById(R.id.openTime);
         closeField = findViewById(R.id.closeTime);
+        handiCapped = findViewById(R.id.handicapCheckbox);
         updateButton = findViewById(R.id.addButton);
 
         updateButton.setText("Update Parking");
@@ -47,6 +51,8 @@ public class ModifyParkingActivity extends AppCompatActivity {
             openField.setText(space.getOpenTime());
             closeField.setText(space.getCloseTime());
 
+            handiCapped.setChecked(space.getHandicapped());
+
 
             updateButton.setOnClickListener(v -> {
                 String name = nameField.getText().toString().trim();
@@ -55,6 +61,7 @@ public class ModifyParkingActivity extends AppCompatActivity {
                 String capStr = capacityField.getText().toString().trim();
                 String openTime = openField.getText().toString().trim();
                 String closeTime = closeField.getText().toString().trim();
+                boolean isHandicapped = handiCapped.isChecked();
 
                 if (name.isEmpty() || latStr.isEmpty() || lonStr.isEmpty() || capStr.isEmpty() ||
                         openTime.isEmpty() || closeTime.isEmpty()) {
@@ -67,7 +74,7 @@ public class ModifyParkingActivity extends AppCompatActivity {
                     double lon = Double.parseDouble(lonStr);
                     int cap = Integer.parseInt(capStr);
 
-                    ParkingSpace updated = new ParkingSpace(cap, lat, lon, space.getCurrentUsers(), name, openTime, closeTime);
+                    ParkingSpace updated = new ParkingSpace(cap, lat, lon, space.getCurrentUsers(), name, openTime, closeTime , isHandicapped);
 
                     firebaseHelper.updateParkingSpace(parkingId, updated,
                             () -> {
@@ -83,6 +90,18 @@ public class ModifyParkingActivity extends AppCompatActivity {
                 }
             });
         }, error -> Toast.makeText(this, "Error: " + error, Toast.LENGTH_LONG).show());
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close the activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 
