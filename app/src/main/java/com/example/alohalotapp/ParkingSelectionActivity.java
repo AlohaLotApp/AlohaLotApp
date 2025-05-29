@@ -42,7 +42,6 @@ public class ParkingSelectionActivity extends AppCompatActivity {
                 map.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 mapHelper.addMarkers(ParkingSelectionActivity.this);
-//                mapHelper.addButtons(ParkingSelectionActivity.this);
             }
         });
 
@@ -75,6 +74,5 @@ public class ParkingSelectionActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mapHelper.addMarkers(ParkingSelectionActivity.this);
-//        mapHelper.addButtons(ParkingSelectionActivity.this);
     }
 }

@@ -2,7 +2,7 @@ package com.example.alohalotapp.map;
 
 import android.graphics.Point;
 
-public class CoordsToPixelsConverter {
+public class CoordinatesToPixelsConverter {
     private static final int tileSize = 256;
     public static Point latLngToPoint(double lat, double lng, int zoom) {
         double scale = tileSize * Math.pow(2, zoom);
