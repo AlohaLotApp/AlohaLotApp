@@ -54,25 +54,22 @@
 
         <Button
             android:id="@+id/addBalanceBtn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="-5dp"
-            android:backgroundTint="@color/blue"
+            style="@style/RoundedButton"
+            android:layout_width="280dp"
             android:text="Add balance" />
 
         <Button
             android:id="@+id/addCardsBtn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="-5dp"
+            style="@style/RoundedButton"
+            android:layout_width="280dp"
             android:backgroundTint="@color/blue"
             android:text="Add cards" />
 
 
         <Button
             android:id="@+id/editCardsBtn"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
+            style="@style/RoundedButton"
+            android:layout_width="280dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/blue"
             android:text="Edit cards" />

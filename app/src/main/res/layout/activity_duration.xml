@@ -27,13 +27,10 @@
 
         <TextView
             android:id="@+id/payment_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/SmallTitleText"
             android:layout_weight="1"
-            android:text="Please select your parking duration"
-            android:textColor="@color/blue"
-            android:textSize="23sp"
-            android:fontFamily="sans-serif-condensed" />
+            android:text="Please select your parking duration" />
+
     </LinearLayout>
 
 
@@ -45,20 +42,18 @@
 
         <Button
             android:id="@+id/button"
-            style="@style/PurpleRoundedButton"
-            android:text="🕒 30 min: 3 $"
-            android:layout_marginBottom="8dp"/>
+            style="@style/RoundedButton"
+            android:text="🕒 30 min: 3$"/>
 
         <Button
             android:id="@+id/button2"
-            style="@style/PurpleRoundedButton"
-            android:text="🕒 1 hour: 5 $"
-            android:layout_marginBottom="8dp"/>
+            style="@style/RoundedButton"
+            android:text="🕒 1 hour: 5$"/>
 
         <Button
             android:id="@+id/button3"
-            style="@style/PurpleRoundedButton"
-            android:text="🕒 3 hours: 11 $" />
+            style="@style/RoundedButton"
+            android:text="🕒 3 hours: 11$" />
     </LinearLayout>
 
 </LinearLayout>
