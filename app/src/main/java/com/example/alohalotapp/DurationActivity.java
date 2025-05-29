@@ -8,10 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DurationActivity extends AppCompatActivity {
 
+    private String userEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duration);
+
+        userEmail = getIntent().getStringExtra("userEmail");
 
         Button button1 = findViewById(R.id.button);
         Button button2 = findViewById(R.id.button2);
@@ -24,7 +28,8 @@ public class DurationActivity extends AppCompatActivity {
 
     private void openPayment(int amount) {
         Intent intent = new Intent(DurationActivity.this, PaymentActivity.class);
-        intent.putExtra("amount", amount);
+        intent.putExtra("amountToPay", amount);
+        intent.putExtra("userEmail", userEmail);
         startActivity(intent);
     }
 }
