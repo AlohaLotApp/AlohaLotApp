@@ -15,9 +15,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -32,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +49,8 @@ public class StatisticsActivity extends AppCompatActivity {
     private Button rewardButton;
     private ProgressBar pointsProgressBar;
     private PieChart pieChart;
+    private BarChart paymentBarChart;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,8 @@ public class StatisticsActivity extends AppCompatActivity {
         restPointsTextView = findViewById(R.id.restPoints);
         pointsProgressBar = findViewById(R.id.progressBar);
         pieChart = findViewById(R.id.PieChart);
+        paymentBarChart = findViewById(R.id.BarChart);
+
 
         SessionManager sessionManager = new SessionManager(this);
         String userId = sessionManager.getUserId();
@@ -143,6 +153,8 @@ public class StatisticsActivity extends AppCompatActivity {
             }
         });
 
+        loadPaymentStatsAndShowBarChart(database, userId);
+
         // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.stats);
@@ -164,6 +176,83 @@ public class StatisticsActivity extends AppCompatActivity {
             return false;
         });
     }
+
+    private void loadPaymentStatsAndShowBarChart(FirebaseDatabase database, String userId) {
+        DatabaseReference paymentStatsRef = database.getReference("users").child(userId).child("paymentStats");
+
+        paymentStatsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                Map<String, Long> paymentStats = (Map<String, Long>) task.getResult().getValue();
+
+                List<BarEntry> entries = new ArrayList<>();
+
+                // Νέα κλειδιά από τη βάση
+                String[] paymentKeys = {"Paid3", "Paid5", "Paid11"};
+                // Εμφανιζόμενα labels στον άξονα
+                String[] paymentLabels = {"3", "5", "11"};
+
+                for (int i = 0; i < paymentKeys.length; i++) {
+                    long count = 0;
+                    if (paymentStats != null && paymentStats.containsKey(paymentKeys[i])) {
+                        count = paymentStats.get(paymentKeys[i]);
+                    }
+                    entries.add(new BarEntry(i, count));
+                }
+
+                BarDataSet dataSet = new BarDataSet(entries, "Payments");
+
+// Ορισμός διαφορετικών χρωμάτων για κάθε μπάρα
+                dataSet.setColors(new int[]{
+                        ContextCompat.getColor(this, R.color.color1),
+                        ContextCompat.getColor(this, R.color.color2),
+                        ContextCompat.getColor(this, R.color.color3)
+                });
+
+                BarData barData = new BarData(dataSet);
+                barData.setBarWidth(1f); // μία μπάρα ανά θέση
+
+                paymentBarChart.setData(barData);
+                paymentBarChart.setFitBars(true);
+                paymentBarChart.getDescription().setEnabled(false);
+
+                XAxis xAxis = paymentBarChart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setGranularity(1f);
+                xAxis.setGranularityEnabled(true);
+                xAxis.setLabelCount(paymentLabels.length);
+                xAxis.setDrawGridLines(false);
+                xAxis.setDrawAxisLine(true);
+
+// Κεντράρισμα των labels κάτω από τις μπάρες
+                xAxis.setAxisMinimum(-0.5f);
+                xAxis.setAxisMaximum(paymentLabels.length - 0.5f);
+
+                xAxis.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        int index = (int) value;
+                        if (index >= 0 && index < paymentLabels.length) {
+                            return paymentLabels[index] + "$";
+                        } else {
+                            return "";
+                        }
+                    }
+                });
+
+// Y Axis ρυθμίσεις
+                paymentBarChart.getAxisLeft().setGranularity(1f);
+                paymentBarChart.getAxisLeft().setGranularityEnabled(true);
+                paymentBarChart.getAxisRight().setEnabled(false);
+
+                paymentBarChart.invalidate();
+
+            } else {
+                paymentBarChart.clear();
+            }
+        });
+    }
+
+
 
     private void setupPieChart(Map<String, Integer> usageStats, Map<String, String> parkingNamesMap) {
         pieChart.clear(); // Καθαρίζει το παλιό data

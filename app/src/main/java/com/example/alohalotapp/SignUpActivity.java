@@ -114,6 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 sessionManager.saveUserId(userId);
 
                                 initializeUserUsageStats(userId);
+                                initializeUserPaymentStats(userId);
 
                                 // Ξεκινάει την επόμενη δραστηριότητα (πχ αρχική οθόνη εφαρμογής)
                                 Intent intent = new Intent(SignUpActivity.this, StartActivity.class);
@@ -151,6 +152,18 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void initializeUserPaymentStats(String userId) {
+        DatabaseReference paymentStatsRef = rootNode.getReference("users").child(userId).child("paymentStats");
+
+        Map<String, Integer> initialPaymentStats = new HashMap<>();
+        initialPaymentStats.put("Paid3", 0);
+        initialPaymentStats.put("Paid5", 0);
+        initialPaymentStats.put("Paid11", 0);
+
+        paymentStatsRef.setValue(initialPaymentStats);
+    }
+
 
 
     // Getter μέθοδος για το userId που δημιουργήθηκε, αν χρειαστεί κάπου αλλού
