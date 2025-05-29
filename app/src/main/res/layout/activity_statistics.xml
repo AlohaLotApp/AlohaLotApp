@@ -243,10 +243,10 @@
 
             <Button
                 android:id="@+id/rewardBtn"
+                style="@style/RoundedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Get Reward "
+                android:text="Get Reward"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
