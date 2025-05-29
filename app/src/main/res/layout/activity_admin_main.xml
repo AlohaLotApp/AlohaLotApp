@@ -25,7 +25,7 @@
     <Button
         android:id="@+id/createNewButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/RoundedButton"
         android:text="Create New"
         android:layout_margin="16dp"
         app:layout_constraintTop_toTopOf="parent"

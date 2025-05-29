@@ -3,10 +3,12 @@ package com.example.alohalotapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Layout;
+
 import android.text.SpannableString;
-import android.util.Log;
+
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,16 +20,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LegendEntry;
+
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -39,13 +42,16 @@ import java.util.Map;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.highlight.Highlight;
+
 
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    private TextView usersEmailTextView, pointsTextView, totalSpentTextView, totalParkingTextView, restPointsTextView;
+    //Variables
+    private TextView usersEmailTextView, pointsTextView, totalSpentTextView, totalParkingTextView, restPointsTextView, topSpotTextView;
     private Button rewardButton;
     private ProgressBar pointsProgressBar;
     private PieChart pieChart;
@@ -68,6 +74,7 @@ public class StatisticsActivity extends AppCompatActivity {
         pointsProgressBar = findViewById(R.id.progressBar);
         pieChart = findViewById(R.id.PieChart);
         paymentBarChart = findViewById(R.id.BarChart);
+        topSpotTextView = findViewById(R.id.topSpotTView);
 
 
         SessionManager sessionManager = new SessionManager(this);
@@ -209,9 +216,12 @@ public class StatisticsActivity extends AppCompatActivity {
                 });
 
                 BarData barData = new BarData(dataSet);
-                barData.setBarWidth(1f); // μία μπάρα ανά θέση
+                barData.setBarWidth(0.5f); // μία μπάρα ανά θέση
 
                 paymentBarChart.setData(barData);
+                barData.setValueTextSize(16f); // ή μεγαλύτερο π.χ. 18f, 20f ανάλογα με το πόσο μεγάλες θέλεις τις τιμές
+                barData.setValueTypeface(Typeface.DEFAULT_BOLD); // προαιρετικά, για πιο έντονα νούμερα
+                barData.setValueTextColor(Color.BLACK); // ή άλλο χρώμα που φαίνεται καλά
                 paymentBarChart.setFitBars(true);
                 paymentBarChart.getDescription().setEnabled(false);
 
@@ -238,6 +248,8 @@ public class StatisticsActivity extends AppCompatActivity {
                         }
                     }
                 });
+                xAxis.setTextSize(14f);
+
 
 // Y Axis ρυθμίσεις
                 paymentBarChart.getAxisLeft().setGranularity(1f);
@@ -259,11 +271,11 @@ public class StatisticsActivity extends AppCompatActivity {
 
         SpannableString centerText = new SpannableString("Your Parking\nStats");
 
-// Bold στην πρώτη γραμμή
+        // Bold στην πρώτη γραμμή
         centerText.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 12, 0);
-// Μεγαλύτερο μέγεθος για τη δεύτερη γραμμή
+        // Μεγαλύτερο μέγεθος για τη δεύτερη γραμμή
         centerText.setSpan(new android.text.style.RelativeSizeSpan(1.3f), 13, centerText.length(), 0);
-// Κεντραρισμένο κείμενο (προαιρετικό)
+        // Κεντραρισμένο κείμενο (προαιρετικό)
         centerText.setSpan(new android.text.style.AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, centerText.length(), 0);
 
         pieChart.setCenterText(centerText);
@@ -293,6 +305,10 @@ public class StatisticsActivity extends AppCompatActivity {
 
         PieData pieData = new PieData(dataSet);
         pieData.setDrawValues(true);
+        pieData.setValueTextSize(16f); // 👈 μεγαλώνει το μέγεθος
+        pieData.setValueTextColor(Color.WHITE); // 👈 αν χρειάζεται για ορατότητα
+        pieData.setValueTypeface(Typeface.DEFAULT_BOLD); // 👈 προαιρετικά bold
+
         pieData.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -301,6 +317,27 @@ public class StatisticsActivity extends AppCompatActivity {
         });
 
         pieChart.setData(pieData);
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                if (e instanceof PieEntry) {
+                    PieEntry entry = (PieEntry) e;
+                    String label = entry.getLabel();
+                    float value = entry.getValue();
+
+                    // Εδώ μπορείς να εμφανίσεις Toast ή να πας σε άλλη οθόνη
+                    Toast.makeText(getApplicationContext(), label + ": " + (int)value, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected() {
+                // Optional: όταν ο χρήστης πατάει σε κενό χώρο
+            }
+        });
+
+
         pieChart.setDrawEntryLabels(false);
         pieChart.getDescription().setEnabled(false);
 
@@ -312,8 +349,12 @@ public class StatisticsActivity extends AppCompatActivity {
         LegendAdapter adapter = new LegendAdapter(labels, colors);
         legendRecyclerView.setAdapter(adapter);
 
+        String maxParkingName = findTopSpot(usageStats, parkingNamesMap);
+        topSpotTextView.setText(maxParkingName);
+
         pieChart.invalidate();
     }
+
 
     private List<Integer> generateColors(int count) {
         List<Integer> colors = new ArrayList<>();
@@ -332,5 +373,24 @@ public class StatisticsActivity extends AppCompatActivity {
     private int calculateRestPoints(int currentPoints) {
         int rewardThreshold = 100;
         return Math.max(rewardThreshold - currentPoints, 0);
+    }
+
+    private String findTopSpot(Map<String, Integer> usageStats, Map<String, String> parkingNamesMap){
+        String maxKey = null;
+        int maxValue = Integer.MIN_VALUE;
+
+        for (Map.Entry<String, Integer> entry : usageStats.entrySet()) {
+            int value = entry.getValue() != null ? entry.getValue() : 0;
+            if (value > maxValue) {
+                maxValue = value;
+                maxKey = entry.getKey();
+            }
+        }
+
+        if (maxKey == null) {
+            return null; // Δεν υπάρχουν στοιχεία
+        }
+
+        return parkingNamesMap.getOrDefault(maxKey, maxKey);
     }
 }

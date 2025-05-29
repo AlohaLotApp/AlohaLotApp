@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     if (emailInput.equalsIgnoreCase("admin")) {
                                         startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
-                                    } else {
+                                    }else {
                                         startActivity(new Intent(LoginActivity.this, StartActivity.class));
                                     }
                                     finish(); // Prevent going back to login screen

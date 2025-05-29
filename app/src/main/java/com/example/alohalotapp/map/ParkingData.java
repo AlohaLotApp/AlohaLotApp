@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class ParkingData {
-    FirebaseAdminHelperClass firebaseHelper;
+    private FirebaseAdminHelperClass firebaseHelper;
 
     public ParkingData(){
         firebaseHelper = new FirebaseAdminHelperClass();
