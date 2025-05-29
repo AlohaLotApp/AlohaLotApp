@@ -12,7 +12,7 @@
         style="@style/RoundedButton"
         android:layout_width="80dp"
         android:layout_height="70dp"
-        android:text="5€"
+        android:text="5$"
         android:layout_margin="10dp" />
 
     <Button
@@ -20,7 +20,7 @@
         style="@style/RoundedButton"
         android:layout_width="80dp"
         android:layout_height="70dp"
-        android:text="10€"
+        android:text="10$"
         android:layout_margin="10dp" />
 
     <Button
@@ -28,7 +28,7 @@
         style="@style/RoundedButton"
         android:layout_width="80dp"
         android:layout_height="70dp"
-        android:text="15€"
+        android:text="15$"
         android:layout_margin="10dp" />
 
 </LinearLayout>
