@@ -34,7 +34,9 @@ public class FirebaseAdminHelperClass {
         return getReference("parkingspaces");
     }
 
-    public void addParkingSpace(String name, double lat, double lon, int capacity, String openTime, String closeTime, android.content.Context context) {
+    public void addParkingSpace(String name, double lat, double lon, int capacity, String openTime,
+                                String closeTime,boolean handiCapped,
+                                android.content.Context context) {
         DatabaseReference reference = getParkingSpacesRef();
 
         reference.get().addOnCompleteListener(task -> {
@@ -45,7 +47,7 @@ public class FirebaseAdminHelperClass {
                 }
 
                 String newParkingId = "Parking" + (count + 1);
-                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name, openTime, closeTime);
+                ParkingSpace newSpace = new ParkingSpace(capacity, lat, lon, 0, name, openTime, closeTime,handiCapped );
 
                 reference.child(newParkingId).setValue(newSpace)
                         .addOnCompleteListener(saveTask -> {

@@ -67,6 +67,7 @@ public class AdminMainActivity extends AppCompatActivity {
             intent.putExtra("parking_name", selectedName);
             startActivity(intent);
         });
+
     }
 
     @Override
