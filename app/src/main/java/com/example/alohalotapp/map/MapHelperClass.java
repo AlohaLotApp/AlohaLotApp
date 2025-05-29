@@ -15,7 +15,10 @@ import com.example.alohalotapp.SignUpActivity;
 import com.example.alohalotapp.StartParkingActivity;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapHelperClass {
@@ -41,7 +44,7 @@ public class MapHelperClass {
 
     public void addMarkers(Context context) {
         if (map == null || map.getWidth() == 0 || map.getHeight() == 0) {
-            Toast.makeText(context, "Map not ready yet.", Toast.LENGTH_SHORT).show();
+            System.out.println("Map not ready yet!");
             return;
         }
 
@@ -49,6 +52,7 @@ public class MapHelperClass {
         int height = map.getHeight();
 
         ParkingData parkingData = new ParkingData();
+        ArrayList<String> openParkingSpotsList = new ArrayList<>();
 
         parkingData.getCoordinates(coordinatesList -> {
             if (coordinatesList == null || coordinatesList.isEmpty()) {
@@ -56,13 +60,13 @@ public class MapHelperClass {
                 return;
             }
 
-            // Fetch other data in parallel using nested lambdas
+
             parkingData.getCapacities(capacitiesList -> {
                 parkingData.getCurrentUsers(currentUsersList -> {
                     parkingData.getIsHandicapped(isHandicappedList -> {
                         parkingData.getOpeningHours(openingHoursList -> {
 
-                            // Build map markers
+
                             StringBuilder markerBuilder = new StringBuilder();
                             int size = Math.min(coordinatesList.size(),
                                     Math.min(capacitiesList.size(),
@@ -71,7 +75,7 @@ public class MapHelperClass {
                             LocalTime now = LocalTime.now();
 
                             for (int i = 0; i < size; i++) {
-                                String color = "red"; // default
+                                String color = "red"; //default
 
                                 try {
                                     LocalTime openingTime = LocalTime.parse(openingHoursList.get(i).first);
@@ -80,13 +84,17 @@ public class MapHelperClass {
                                     boolean isOpen = !now.isBefore(openingTime) && now.isBefore(closingTime);
 
                                     if (!isOpen || capacitiesList.get(i).equals(currentUsersList.get(i))) {
-                                        color = "black";
+                                        color = "black"; //if closed
                                     } else if (Boolean.TRUE.equals(isHandicappedList.get(i))) {
-                                        color = "blue";
+                                        color = "blue"; //if not closed and for handicapped people
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+
+                                if (color != "black")
+                                    openParkingSpotsList.add(coordinatesList.get(i));
+
 
                                 markerBuilder.append("&markers=color:")
                                         .append(color)
@@ -101,11 +109,11 @@ public class MapHelperClass {
                                     + markerBuilder
                                     + "&key=" + STATIC_MAP_API_KEY;
 
-                            // Load the map image first, then add buttons after it's fully loaded
+
                             Picasso.get().load(mapUrl).into(map, new com.squareup.picasso.Callback() {
                                 @Override
                                 public void onSuccess() {
-                                    addButtons(context, coordinatesList);
+                                    addButtons(context, openParkingSpotsList);
                                 }
 
                                 @Override
@@ -174,7 +182,7 @@ public class MapHelperClass {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(context, StartParkingActivity.class);
-                            // Make sure the context is an Activity
+
                             if (context instanceof android.app.Activity) {
                                 context.startActivity(intent);
                             } else {
@@ -186,17 +194,11 @@ public class MapHelperClass {
 
                     int finalX = x;
                     int finalY = y;
-//                    button.setOnClickListener(v -> Toast.makeText(context,
-//                            "Clicked at: " + finalX + ", " + finalY,
-//                            Toast.LENGTH_SHORT).show());
 
                     layout.addView(button);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-//        }, error -> {
-//            Toast.makeText(context, "Failed to load coordinates: " + error, Toast.LENGTH_LONG).show();
-//        });
     }
 }
