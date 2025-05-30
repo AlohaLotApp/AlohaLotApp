@@ -46,8 +46,7 @@ public class PaymentActivity extends AppCompatActivity {
         payButton = findViewById(R.id.pay_button);
 
         Intent intent = getIntent();
-        amountToPay = intent.getIntExtra("amountToPay", 5); // default 5
-
+        amountToPay = intent.getIntExtra("amountToPay", 5); // default
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
 
         // Φόρτωσε το υπόλοιπο και ενημέρωσε UI
