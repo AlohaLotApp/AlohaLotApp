@@ -48,15 +48,9 @@
 
             <TextView
                 android:id="@+id/statsTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BigTitleText"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:fontFamily="sans-serif-condensed-medium"
                 android:text="Statistics"
-                android:textColor="@color/blue"
-                android:textSize="34sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.431"
                 app:layout_constraintStart_toEndOf="@id/cardView"

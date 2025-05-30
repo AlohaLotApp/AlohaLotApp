@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cde5e8"
+    android:background="@color/background"
     tools:context=".admin.ModifyParkingActivity">
 
     <ScrollView
@@ -95,7 +95,6 @@
                 android:id="@+id/addButton"
                 android:layout_width="wrap_content"
                 style="@style/RoundedButton"
-                android:layout_marginTop="20dp"
                 android:text="Add"
                 app:layout_constraintTop_toBottomOf="@id/handicapCheckbox"
                 app:layout_constraintStart_toStartOf="parent"
