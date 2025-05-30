@@ -46,8 +46,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.highlight.Highlight;
 
-
-
 public class StatisticsActivity extends AppCompatActivity {
 
     //Variables
