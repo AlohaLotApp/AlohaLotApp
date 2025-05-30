@@ -236,6 +236,12 @@ public class StatisticsActivity extends AppCompatActivity {
 // Κεντράρισμα των labels κάτω από τις μπάρες
                 xAxis.setAxisMinimum(-0.5f);
                 xAxis.setAxisMaximum(paymentLabels.length - 0.5f);
+                barData.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.valueOf((int) value); // αφαιρεί τα δεκαδικά
+                    }
+                });
 
                 xAxis.setValueFormatter(new ValueFormatter() {
                     @Override
@@ -248,6 +254,7 @@ public class StatisticsActivity extends AppCompatActivity {
                         }
                     }
                 });
+
                 xAxis.setTextSize(14f);
 
 
