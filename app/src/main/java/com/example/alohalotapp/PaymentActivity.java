@@ -13,12 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
 import com.example.alohalotapp.admin.ParkingSpace;
-import com.google.firebase.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -164,10 +163,10 @@ public class PaymentActivity extends AppCompatActivity {
 
     private void addOrder(FirebaseDatabase database, double amountPaid){
         DatabaseReference orderRef = database.getReference("users").child(userId).child("orders");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yy");
 
         HashMap<Double, Integer> durationMap = new HashMap<>();
-        durationMap.put(3.0, 30); //3$ 30 minutes
+        durationMap.put(3.0, 30); //3$ 30 minutesx
         durationMap.put(5.0, 60); //5$ 1 hours
         durationMap.put(11.0, 180); //11$ 3 hours
 
@@ -183,8 +182,8 @@ public class PaymentActivity extends AppCompatActivity {
                 String parkingName = getIntent().getStringExtra("parkingName");
 
                 Map<String, Object> order = new HashMap<>();
-                order.put("arrivalTime", LocalTime.now().format(timeFormatter));
-                order.put("departureTime", LocalTime.now().plusMinutes(durationMap.get(amountPaid)).format(timeFormatter));
+                order.put("arrivalTime", LocalDateTime.now().format(timeFormatter));
+                order.put("departureTime", LocalDateTime.now().plusMinutes(durationMap.get(amountPaid)).format(timeFormatter));
                 order.put("parkingName", parkingName);
 
                 fireBaseHelper.getParkingSpaceByName(parkingName, parkingWithId -> {
