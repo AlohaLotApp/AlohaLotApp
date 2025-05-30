@@ -30,6 +30,7 @@ public class DurationActivity extends AppCompatActivity {
 
     private void openPayment(int amount) {
         Intent intent = new Intent(DurationActivity.this, PaymentActivity.class);
+        intent.putExtra("parkingName", getIntent().getStringExtra("parkingName"));
         intent.putExtra("amountToPay", amount);
         intent.putExtra("userEmail", userEmail);
         startActivity(intent);

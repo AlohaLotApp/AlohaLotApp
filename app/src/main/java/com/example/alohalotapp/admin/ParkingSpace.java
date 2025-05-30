@@ -54,4 +54,6 @@ public class ParkingSpace {
     }
 
     public boolean getHandicapped() {return handicapped; }
+
+    public void setCurrentUsers(int currentUsers) { this.currentUsers = currentUsers; }
 }
