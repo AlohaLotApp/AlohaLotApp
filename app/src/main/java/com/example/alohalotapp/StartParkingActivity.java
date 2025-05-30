@@ -67,6 +67,7 @@ public class StartParkingActivity extends AppCompatActivity {
                 if (!valid) return;
 
                 Intent intent = new Intent(StartParkingActivity.this, DurationActivity.class);
+                intent.putExtra("parkingName", getIntent().getStringExtra("parkingName"));
                 startActivity(intent);
 
             }
