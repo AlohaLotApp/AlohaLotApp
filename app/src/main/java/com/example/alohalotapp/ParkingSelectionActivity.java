@@ -45,29 +45,6 @@ public class ParkingSelectionActivity extends AppCompatActivity {
             }
         });
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.home) {
-                Intent intent = new Intent(ParkingSelectionActivity.this, StartActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // Remove animation
-                return true;
-            } else if (id == R.id.wallet) {
-                Intent intent = new Intent(ParkingSelectionActivity.this, WalletActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // Remove animation
-                return true;
-            } else if (id == R.id.stats) {
-                Intent intent = new Intent(ParkingSelectionActivity.this, StatisticsActivity.class);
-                intent.putExtra("userEmail", userEmail);
-                startActivity(intent);
-                overridePendingTransition(0, 0); // Remove animation
-                return true;
-            }
-            return false;
-        });
     }
 
     @Override

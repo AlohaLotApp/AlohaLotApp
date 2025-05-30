@@ -22,13 +22,9 @@
 
         <TextView
             android:id="@+id/balanceTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/BigTitleText"
             android:layout_marginTop="52dp"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:text="Your Balance"
-            android:textAlignment="center"
-            android:textSize="34sp" />
+            android:text="Your Balance" />
 
         <TextView
             android:id="@+id/balanceCount"
@@ -37,6 +33,7 @@
             android:fontFamily="sans-serif-condensed-medium"
             android:text="0$"
             android:textAlignment="center"
+            android:textColor="@color/blue"
             android:textSize="80dp" />
     </LinearLayout>
 
