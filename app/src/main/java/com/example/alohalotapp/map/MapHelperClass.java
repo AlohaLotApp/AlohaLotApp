@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.alohalotapp.StartParkingActivity;
+import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
 import com.squareup.picasso.Picasso;
 
 import java.time.LocalTime;
@@ -47,20 +48,20 @@ public class MapHelperClass {
         int width = map.getWidth();
         int height = map.getHeight();
 
-        ParkingData parkingData = new ParkingData();
+        FirebaseAdminHelperClass firebaseHelper = new FirebaseAdminHelperClass();
         ArrayList<String> openParkingSpotsList = new ArrayList<>();
 
-        parkingData.getCoordinates(coordinatesList -> {
+        firebaseHelper.loadCoordinates(coordinatesList -> {
             if (coordinatesList == null || coordinatesList.isEmpty()) {
                 Toast.makeText(context, "No parking spots to show on map.", Toast.LENGTH_LONG).show();
                 return;
             }
 
 
-            parkingData.getCapacities(capacitiesList -> {
-                parkingData.getCurrentUsers(currentUsersList -> {
-                    parkingData.getIsHandicapped(isHandicappedList -> {
-                        parkingData.getOpeningHours(openingHoursList -> {
+            firebaseHelper.loadCapacities(capacitiesList -> {
+                firebaseHelper.loadCurrentUsers(currentUsersList -> {
+                    firebaseHelper.loadIsHandicapped(isHandicappedList -> {
+                        firebaseHelper.loadOpeningHours(openingHoursList -> {
 
 
                             StringBuilder markerBuilder = new StringBuilder();
@@ -130,8 +131,6 @@ public class MapHelperClass {
     }
 
     public void addButtons(Context context, List<String> coordinatesList) {
-        ParkingData parkingData = new ParkingData();
-
         if (coordinatesList == null || coordinatesList.isEmpty()) {
             Toast.makeText(context, "No coordinates found", Toast.LENGTH_SHORT).show();
             return;

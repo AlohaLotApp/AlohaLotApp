@@ -4,7 +4,6 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
-import com.example.alohalotapp.map.ParkingData;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
