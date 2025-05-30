@@ -13,13 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
 import com.example.alohalotapp.admin.ParkingSpace;
-import com.google.firebase.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
