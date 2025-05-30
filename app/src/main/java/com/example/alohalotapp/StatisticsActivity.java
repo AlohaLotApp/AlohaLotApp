@@ -65,6 +65,7 @@ public class StatisticsActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_statistics);
 
+        //gets the textIds
         usersEmailTextView = findViewById(R.id.statsImageTView);
         pointsTextView = findViewById(R.id.totalPointsTView);
         totalSpentTextView = findViewById(R.id.totalSpentTView);
@@ -77,13 +78,16 @@ public class StatisticsActivity extends AppCompatActivity {
         topSpotTextView = findViewById(R.id.topSpotTView);
 
 
+        // Create a SessionManager instance using the current context
         SessionManager sessionManager = new SessionManager(this);
+        // Retrieve the stored user ID from shared preferences
         String userId = sessionManager.getUserId();
 
+        //Connection with database
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
         DatabaseReference userRef = database.getReference("users").child(userId);
 
-        // Φόρτωση στοιχείων χρήστη
+        // Loads users info
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
                 String email = task.getResult().child("regEmail").getValue(String.class);
@@ -97,6 +101,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 totalParkingTextView.setText(parkings != null ? parkings.toString() : "0");
                 pointsProgressBar.setProgress(points != null ? points : 0);
 
+                //calcultes the rest points
                 int rest = calculateRestPoints(points != null ? points : 0);
                 restPointsTextView.setText(String.valueOf(rest));
 
@@ -108,6 +113,7 @@ public class StatisticsActivity extends AppCompatActivity {
                         pointsTextView.setText("0");
                         userRef.child("points").setValue(0);
 
+                        //adds 5$
                         SharedPreferences prefs = getSharedPreferences("wallet_prefs", MODE_PRIVATE);
                         int currentBalance = prefs.getInt("balance_" + userId, 0);
                         int rewardPoints = 5;
@@ -182,6 +188,101 @@ public class StatisticsActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+    //Calculates the rest points
+    private int calculateRestPoints(int currentPoints) {
+        int rewardThreshold = 100;
+        return Math.max(rewardThreshold - currentPoints, 0);
+    }
+
+    private void setupPieChart(Map<String, Integer> usageStats, Map<String, String> parkingNamesMap) {
+
+        pieChart.clear(); // Καθαρίζει το παλιό data
+
+        SpannableString centerText = new SpannableString("Your Parking\nStats");
+
+        // Bold στην πρώτη γραμμή
+        centerText.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 12, 0);
+        // Μεγαλύτερο μέγεθος για τη δεύτερη γραμμή
+        centerText.setSpan(new android.text.style.RelativeSizeSpan(1.3f), 13, centerText.length(), 0);
+        // Κεντραρισμένο κείμενο (προαιρετικό)
+        centerText.setSpan(new android.text.style.AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, centerText.length(), 0);
+
+        pieChart.setCenterText(centerText);
+        pieChart.setCenterTextColor(Color.DKGRAY);
+
+        List<PieEntry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : usageStats.entrySet()) {
+            String parkingId = entry.getKey();
+            int value = entry.getValue() != null ? entry.getValue() : 0;
+
+            if (value == 0) continue;  // Παράλειψη κομματιών με 0
+
+            String displayName = parkingNamesMap.getOrDefault(parkingId, parkingId);
+
+            entries.add(new PieEntry(value, displayName));
+            labels.add(displayName);
+        }
+
+        // Δημιουργία του dataset
+        PieDataSet dataSet = new PieDataSet(entries, "Parking Usage");
+
+        // Χρώματα για το chart και την custom legend
+        List<Integer> colors = generateColors(entries.size());
+        dataSet.setColors(colors);
+
+        PieData pieData = new PieData(dataSet);
+        pieData.setDrawValues(true);
+        pieData.setValueTextSize(16f); // 👈 μεγαλώνει το μέγεθος
+        pieData.setValueTextColor(Color.WHITE); // 👈 αν χρειάζεται για ορατότητα
+        pieData.setValueTypeface(Typeface.DEFAULT_BOLD); // 👈 προαιρετικά bold
+
+        pieData.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.valueOf((int) value);
+            }
+        });
+
+        pieChart.setData(pieData);
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                if (e instanceof PieEntry) {
+                    PieEntry entry = (PieEntry) e;
+                    String label = entry.getLabel();
+                    float value = entry.getValue();
+
+                    // Εδώ μπορείς να εμφανίσεις Toast ή να πας σε άλλη οθόνη
+                    Toast.makeText(getApplicationContext(), label + ": " + (int)value, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected() {
+                // Optional: όταν ο χρήστης πατάει σε κενό χώρο
+            }
+        });
+
+
+        pieChart.setDrawEntryLabels(false);
+        pieChart.getDescription().setEnabled(false);
+
+        Legend legend = pieChart.getLegend();
+        legend.setEnabled(false);
+
+        RecyclerView legendRecyclerView = findViewById(R.id.legendRecyclerView);
+        legendRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        LegendAdapter adapter = new LegendAdapter(labels, colors);
+        legendRecyclerView.setAdapter(adapter);
+
+        String maxParkingName = findTopSpot(usageStats, parkingNamesMap);
+        topSpotTextView.setText(maxParkingName);
+
+        pieChart.invalidate();
     }
 
     private void loadPaymentStatsAndShowBarChart(FirebaseDatabase database, String userId) {
@@ -273,96 +374,6 @@ public class StatisticsActivity extends AppCompatActivity {
 
 
 
-    private void setupPieChart(Map<String, Integer> usageStats, Map<String, String> parkingNamesMap) {
-        pieChart.clear(); // Καθαρίζει το παλιό data
-
-        SpannableString centerText = new SpannableString("Your Parking\nStats");
-
-        // Bold στην πρώτη γραμμή
-        centerText.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 12, 0);
-        // Μεγαλύτερο μέγεθος για τη δεύτερη γραμμή
-        centerText.setSpan(new android.text.style.RelativeSizeSpan(1.3f), 13, centerText.length(), 0);
-        // Κεντραρισμένο κείμενο (προαιρετικό)
-        centerText.setSpan(new android.text.style.AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, centerText.length(), 0);
-
-        pieChart.setCenterText(centerText);
-        pieChart.setCenterTextColor(Color.DKGRAY);
-
-        List<PieEntry> entries = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : usageStats.entrySet()) {
-            String parkingId = entry.getKey();
-            int value = entry.getValue() != null ? entry.getValue() : 0;
-
-            if (value == 0) continue;  // Παράλειψη κομματιών με 0
-
-            String displayName = parkingNamesMap.getOrDefault(parkingId, parkingId);
-
-            entries.add(new PieEntry(value, displayName));
-            labels.add(displayName);
-        }
-
-        // Δημιουργία του dataset
-        PieDataSet dataSet = new PieDataSet(entries, "Parking Usage");
-
-        // Χρώματα για το chart και την custom legend
-        List<Integer> colors = generateColors(entries.size());
-        dataSet.setColors(colors);
-
-        PieData pieData = new PieData(dataSet);
-        pieData.setDrawValues(true);
-        pieData.setValueTextSize(16f); // 👈 μεγαλώνει το μέγεθος
-        pieData.setValueTextColor(Color.WHITE); // 👈 αν χρειάζεται για ορατότητα
-        pieData.setValueTypeface(Typeface.DEFAULT_BOLD); // 👈 προαιρετικά bold
-
-        pieData.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.valueOf((int) value);
-            }
-        });
-
-        pieChart.setData(pieData);
-
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                if (e instanceof PieEntry) {
-                    PieEntry entry = (PieEntry) e;
-                    String label = entry.getLabel();
-                    float value = entry.getValue();
-
-                    // Εδώ μπορείς να εμφανίσεις Toast ή να πας σε άλλη οθόνη
-                    Toast.makeText(getApplicationContext(), label + ": " + (int)value, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onNothingSelected() {
-                // Optional: όταν ο χρήστης πατάει σε κενό χώρο
-            }
-        });
-
-
-        pieChart.setDrawEntryLabels(false);
-        pieChart.getDescription().setEnabled(false);
-
-        Legend legend = pieChart.getLegend();
-        legend.setEnabled(false);
-
-        RecyclerView legendRecyclerView = findViewById(R.id.legendRecyclerView);
-        legendRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        LegendAdapter adapter = new LegendAdapter(labels, colors);
-        legendRecyclerView.setAdapter(adapter);
-
-        String maxParkingName = findTopSpot(usageStats, parkingNamesMap);
-        topSpotTextView.setText(maxParkingName);
-
-        pieChart.invalidate();
-    }
-
-
     private List<Integer> generateColors(int count) {
         List<Integer> colors = new ArrayList<>();
         float saturation = 0.7f; // κορεσμός (0-1)
@@ -374,12 +385,6 @@ public class StatisticsActivity extends AppCompatActivity {
             colors.add(color);
         }
         return colors;
-    }
-
-
-    private int calculateRestPoints(int currentPoints) {
-        int rewardThreshold = 100;
-        return Math.max(rewardThreshold - currentPoints, 0);
     }
 
     private String findTopSpot(Map<String, Integer> usageStats, Map<String, String> parkingNamesMap){
