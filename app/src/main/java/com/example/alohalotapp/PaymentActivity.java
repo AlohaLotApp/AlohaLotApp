@@ -3,7 +3,6 @@ package com.example.alohalotapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,8 +10,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,19 +24,12 @@ public class PaymentActivity extends AppCompatActivity {
     private int amountToPay;
     private SessionManager sessionManager;
     private String userId;
-    private String userEmail;
-    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_payment);
 
-        balanceText = findViewById(R.id.balance_text);
-        payButton = findViewById(R.id.pay_button);
-
-        // Διόρθωση: χρησιμοποίησε τα πεδία, όχι τοπικές μεταβλητές
+        // Μετάφερε την αρχικοποίηση εδώ για να έχει έγκυρο context
         sessionManager = new SessionManager(this);
         userId = sessionManager.getUserId();
 
@@ -49,12 +39,18 @@ public class PaymentActivity extends AppCompatActivity {
             return;
         }
 
-        // Πάρε σωστά τα extras
-        Intent intent = getIntent();
-        userEmail = intent.getStringExtra("userEmail");
-        amountToPay = intent.getIntExtra("amountToPay", 5); // default value
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_payment);
 
-        // Φόρτωσε το υπόλοιπο και ενημέρωσε το κουμπί
+        balanceText = findViewById(R.id.balance_text);
+        payButton = findViewById(R.id.pay_button);
+
+        Intent intent = getIntent();
+        amountToPay = intent.getIntExtra("amountToPay", 5); // default 5
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
+
+        // Φόρτωσε το υπόλοιπο και ενημέρωσε UI
         loadBalance();
         payButton.setText("Pay $" + amountToPay);
 
@@ -64,15 +60,14 @@ public class PaymentActivity extends AppCompatActivity {
                 saveBalance();
                 balanceText.setText("Your balance: " + balance + " $");
                 Toast.makeText(PaymentActivity.this, "Payment of $" + amountToPay + " successful!", Toast.LENGTH_SHORT).show();
-                updateUserStatsInFirebase(amountToPay);
+                updateUserStatsInFirebase(amountToPay, database);
             } else {
                 Toast.makeText(PaymentActivity.this, "Insufficient balance! Go to wallet!", Toast.LENGTH_SHORT).show();
             }
 
-            // Πάντα επιστροφή στο StartActivity μετά από 3 δευτερόλεπτα
+            // Επιστροφή στο StartActivity μετά από 3 δευτερόλεπτα
             new android.os.Handler().postDelayed(() -> {
                 Intent i = new Intent(PaymentActivity.this, StartActivity.class);
-                i.putExtra("userEmail", userEmail);
                 startActivity(i);
                 finish();
             }, 3000);
@@ -92,15 +87,7 @@ public class PaymentActivity extends AppCompatActivity {
                 .apply();
     }
 
-    private void updateUserStatsInFirebase(int amountPaid) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Toast.makeText(this, "No user logged in", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String userId = user.getUid();
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    private void updateUserStatsInFirebase(int amountPaid, FirebaseDatabase database) {
         DatabaseReference userRef = database.getReference("users").child(userId);
 
         userRef.get().addOnSuccessListener(snapshot -> {
@@ -114,8 +101,7 @@ public class PaymentActivity extends AppCompatActivity {
                 double newAmountSpent = currentAmount + amountPaid;
                 int newPoints = currentPoints + amountPaid;
 
-                DatabaseReference paymentStatsRef = userRef.child("paymentStats");
-
+                // Πάρε τις μετρήσεις μέσα στο paymentStats
                 Long paid3 = snapshot.child("paymentStats").child("Paid3").getValue(Long.class);
                 Long paid5 = snapshot.child("paymentStats").child("Paid5").getValue(Long.class);
                 Long paid11 = snapshot.child("paymentStats").child("Paid11").getValue(Long.class);
@@ -128,12 +114,15 @@ public class PaymentActivity extends AppCompatActivity {
                 else if (amountPaid == 5) newPaid5++;
                 else if (amountPaid == 11) newPaid11++;
 
+                Map<String, Object> paymentStatsUpdates = new HashMap<>();
+                paymentStatsUpdates.put("Paid3", newPaid3);
+                paymentStatsUpdates.put("Paid5", newPaid5);
+                paymentStatsUpdates.put("Paid11", newPaid11);
+
                 Map<String, Object> updates = new HashMap<>();
                 updates.put("amountSpent", newAmountSpent);
                 updates.put("points", newPoints);
-                updates.put("paymentStats/Paid3", newPaid3);
-                updates.put("paymentStats/Paid5", newPaid5);
-                updates.put("paymentStats/Paid11", newPaid11);
+                updates.put("paymentStats", paymentStatsUpdates);
 
                 userRef.updateChildren(updates)
                         .addOnSuccessListener(aVoid -> Toast.makeText(this, "User stats updated!", Toast.LENGTH_SHORT).show())
