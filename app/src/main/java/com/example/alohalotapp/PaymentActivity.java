@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
 import com.example.alohalotapp.admin.ParkingSpace;
+import com.example.alohalotapp.orders.OrderHelperClass;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,6 +32,8 @@ public class PaymentActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private String userId;
 
+    private OrderHelperClass orderHelper;
+
     private FirebaseAdminHelperClass fireBaseHelper;
 
     @Override
@@ -41,6 +44,7 @@ public class PaymentActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         userId = sessionManager.getUserId();
         fireBaseHelper = new FirebaseAdminHelperClass();
+        orderHelper = orderHelper.getInstance();
 
         if (userId == null) {
             Toast.makeText(this, "No user logged in!", Toast.LENGTH_SHORT).show();
@@ -69,7 +73,7 @@ public class PaymentActivity extends AppCompatActivity {
                 balanceText.setText("Your balance: " + balance + " $");
                 Toast.makeText(PaymentActivity.this, "Payment of $" + amountToPay + " successful!", Toast.LENGTH_SHORT).show();
                 updateUserStatsInFirebase(amountToPay, database);
-                addOrder(database, amountToPay);
+                orderHelper.addOrder(PaymentActivity.this, database, amountToPay, userId, getIntent().getStringExtra("parkingName"));
             } else {
                 Toast.makeText(PaymentActivity.this, "Insufficient balance! Go to wallet!", Toast.LENGTH_SHORT).show();
             }
@@ -159,54 +163,5 @@ public class PaymentActivity extends AppCompatActivity {
                 Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show());
-    }
-
-    private void addOrder(FirebaseDatabase database, double amountPaid){
-        DatabaseReference orderRef = database.getReference("users").child(userId).child("orders");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yy");
-
-        HashMap<Double, Integer> durationMap = new HashMap<>();
-        durationMap.put(3.0, 30); //3$ 30 minutesx
-        durationMap.put(5.0, 60); //5$ 1 hours
-        durationMap.put(11.0, 180); //11$ 3 hours
-
-
-        orderRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                long count = 0;
-                if (task.getResult().exists()) {
-                    count = task.getResult().getChildrenCount();
-                }
-
-                String newOrderKey = "order" + (count + 1);
-                String parkingName = getIntent().getStringExtra("parkingName");
-
-                Map<String, Object> order = new HashMap<>();
-                order.put("arrivalTime", LocalDateTime.now().format(timeFormatter));
-                order.put("departureTime", LocalDateTime.now().plusMinutes(durationMap.get(amountPaid)).format(timeFormatter));
-                order.put("parkingName", parkingName);
-
-                fireBaseHelper.getParkingSpaceByName(parkingName, parkingWithId -> {
-                    ParkingSpace space = parkingWithId.space;
-                    String id = parkingWithId.id;
-
-                    int newCount = space.getCurrentUsers() + 1;
-                    space.setCurrentUsers(newCount); // Update the value in the object
-
-                    fireBaseHelper.updateParkingSpace(id, space,
-                            () -> Log.d("Firebase", "User count decreased for " + parkingName),
-                            error -> Log.e("Firebase", "Failed to update parking space: " + error)
-                    );
-
-                }, error -> Log.e("Firebase", "Could not find parking: " + error));
-
-                // Save under /users/userId/orders/orderX
-                orderRef.child(newOrderKey).setValue(order)
-                        .addOnSuccessListener(aVoid -> Toast.makeText(this, "Order added!", Toast.LENGTH_SHORT).show())
-                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to add order", Toast.LENGTH_SHORT).show());
-            } else {
-                Toast.makeText(this, "Failed to read orders", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }
