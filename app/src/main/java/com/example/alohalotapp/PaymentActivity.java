@@ -3,6 +3,7 @@ package com.example.alohalotapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -91,20 +93,12 @@ public class PaymentActivity extends AppCompatActivity {
                 .apply();
     }
 
-    private void updateUserStatsInFirebase(int amountPaid) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Toast.makeText(this, "No user logged in", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String userId = user.getUid();
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    private void updateUserStatsInFirebase(int amountPaid, FirebaseDatabase database) {
         DatabaseReference userRef = database.getReference("users").child(userId);
 
         userRef.get().addOnSuccessListener(snapshot -> {
             if (snapshot.exists()) {
-                // Βασικά στατιστικά
+                // 1. Retrieve current stats
                 Double currentAmountSpent = snapshot.child("amountSpent").getValue(Double.class);
                 Long currentPointsLong = snapshot.child("points").getValue(Long.class);
 
@@ -114,9 +108,7 @@ public class PaymentActivity extends AppCompatActivity {
                 double newAmountSpent = currentAmount + amountPaid;
                 int newPoints = currentPoints + amountPaid;
 
-                // Πληρωμές ανά ποσό
-                DatabaseReference paymentStatsRef = userRef.child("paymentStats");
-
+                // 2. Update paymentStats: Paid3, Paid5, Paid11
                 Long paid3 = snapshot.child("paymentStats").child("Paid3").getValue(Long.class);
                 Long paid5 = snapshot.child("paymentStats").child("Paid5").getValue(Long.class);
                 Long paid11 = snapshot.child("paymentStats").child("Paid11").getValue(Long.class);
@@ -125,37 +117,54 @@ public class PaymentActivity extends AppCompatActivity {
                 long newPaid5 = paid5 != null ? paid5 : 0;
                 long newPaid11 = paid11 != null ? paid11 : 0;
 
-                // Αύξηση του σωστού counter
-                if (amountPaid == 3) {
-                    newPaid3++;
-                } else if (amountPaid == 5) {
-                    newPaid5++;
-                } else if (amountPaid == 11) {
-                    newPaid11++;
-                }
+                if (amountPaid == 3) newPaid3++;
+                else if (amountPaid == 5) newPaid5++;
+                else if (amountPaid == 11) newPaid11++;
 
-                // Ενημέρωση δεδομένων
+                Map<String, Object> paymentStatsUpdates = new HashMap<>();
+                paymentStatsUpdates.put("Paid3", newPaid3);
+                paymentStatsUpdates.put("Paid5", newPaid5);
+                paymentStatsUpdates.put("Paid11", newPaid11);
+
+                // 3. Update usageStats for the specific parking
+                String parkingName = getIntent().getStringExtra("parkingName");
+                Long usages = snapshot.child("usageStats").child(parkingName).getValue(Long.class);
+                long newUsages = usages != null ? usages + 1 : 1;
+
+                Map<String, Object> usageStatsUpdates = new HashMap<>();
+                DataSnapshot usageStatsSnapshot = snapshot.child("usageStats");
+                for (DataSnapshot usage : usageStatsSnapshot.getChildren()) {
+                    String key = usage.getKey();
+                    Long value = usage.getValue(Long.class);
+                    usageStatsUpdates.put(key, value != null ? value : 0L);
+                }
+                usageStatsUpdates.put(parkingName, newUsages);
+
+                // 4. Prepare all updates for the user node
                 Map<String, Object> updates = new HashMap<>();
                 updates.put("amountSpent", newAmountSpent);
                 updates.put("points", newPoints);
-                updates.put("paymentStats/Paid3", newPaid3);
-                updates.put("paymentStats/Paid5", newPaid5);
-                updates.put("paymentStats/Paid11", newPaid11);
+                updates.put("paymentStats", paymentStatsUpdates);
+                updates.put("usageStats", usageStatsUpdates);
 
+                // 5. Send updates to Firebase
                 userRef.updateChildren(updates)
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(this, "User stats updated!", Toast.LENGTH_SHORT).show();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(this, "Failed to update stats", Toast.LENGTH_SHORT).show();
-                        });
 
+                            // 6. Increment totalParkings
+                            Long totalParkings = snapshot.child("totalParkings").getValue(Long.class);
+                            long updatedTotalParkings = totalParkings != null ? totalParkings + 1 : 1;
+
+                            userRef.child("totalParkings").setValue(updatedTotalParkings)
+                                    .addOnSuccessListener(aVoid2 -> Log.d("Firebase", "totalParkings updated"))
+                                    .addOnFailureListener(e -> Log.e("Firebase", "Failed to update totalParkings", e));
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to update stats", Toast.LENGTH_SHORT).show());
             } else {
                 Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show();
             }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
-        });
+        }).addOnFailureListener(e -> Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show());
     }
 
 }
