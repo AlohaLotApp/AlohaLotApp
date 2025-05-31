@@ -5,44 +5,44 @@ import android.content.SharedPreferences;
 
 public class SessionManager {
 
-    // Το όνομα του αρχείου SharedPreferences όπου αποθηκεύονται τα δεδομένα του χρήστη
+    // The name of the SharedPreferences file where user data is stored
     private static final String PREF_NAME = "UserSessionPrefs";
-    // Το κλειδί με το οποίο αποθηκεύουμε/ανακτούμε το userId
+    // The key used to store/retrieve the userId
     private static final String KEY_USER_ID = "userId";
 
-    // Αντικείμενο SharedPreferences για ανάγνωση αποθηκευμένων δεδομένων
+    // SharedPreferences object used to read stored data
     private SharedPreferences sharedPreferences;
-    // Editor για να κάνουμε αλλαγές στα SharedPreferences (π.χ. αποθήκευση νέων δεδομένων)
+    // Editor used to make changes to SharedPreferences (e.g., save new data)
     private SharedPreferences.Editor editor;
 
-    // Κατασκευαστής της κλάσης, λαμβάνει context από το Activity/Service
+    // Constructor that receives a context from the Activity/Service
     public SessionManager(Context context) {
-        // Αρχικοποιεί το SharedPreferences με το όνομα PREF_NAME και λειτουργία private (μόνο η εφαρμογή έχει πρόσβαση)
+        // Initializes SharedPreferences with the name PREF_NAME and private mode (only accessible by the app)
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        // Αρχικοποιεί τον editor για να μπορούμε να γράφουμε δεδομένα
+        // Initializes the editor for writing data
         editor = sharedPreferences.edit();
     }
 
-    // Αποθηκεύει το userId στα SharedPreferences
+    // Saves the userId into SharedPreferences
     public void saveUserId(String userId) {
-        editor.putString(KEY_USER_ID, userId);  // Αποθηκεύει το userId με το κλειδί KEY_USER_ID
-        editor.apply(); // Εφαρμόζει την αλλαγή ασύγχρονα (χωρίς να μπλοκάρει το UI thread)
+        editor.putString(KEY_USER_ID, userId);  // Stores the userId with the key KEY_USER_ID
+        editor.apply(); // Applies the change asynchronously (non-blocking for UI thread)
     }
 
-    // Ανακτά το αποθηκευμένο userId από τα SharedPreferences
+    // Retrieves the stored userId from SharedPreferences
     public String getUserId() {
         return sharedPreferences.getString(KEY_USER_ID, null);
-        // Επιστρέφει το userId αν υπάρχει, αλλιώς null
+        // Returns the userId if it exists, otherwise null
     }
 
-    // Επιστρέφει true αν υπάρχει αποθηκευμένο userId, δηλαδή αν ο χρήστης θεωρείται "συνδεδεμένος"
+    // Returns true if a userId is stored, meaning the user is considered "logged in"
     public boolean isLoggedIn() {
         return getUserId() != null;
     }
 
-    // Καθαρίζει όλα τα αποθηκευμένα δεδομένα session (π.χ. σε logout)
+    // Clears all stored session data (e.g., during logout)
     public void clearSession() {
-        editor.clear();  // Διαγράφει όλα τα κλειδιά και τιμές στα SharedPreferences
-        editor.apply();  // Εφαρμόζει τις αλλαγές ασύγχρονα
+        editor.clear();  // Deletes all keys and values from SharedPreferences
+        editor.apply();  // Applies the changes asynchronously
     }
 }
