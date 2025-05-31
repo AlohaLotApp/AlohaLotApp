@@ -21,11 +21,14 @@ import java.util.List;
 
 public class MapHelperClass {
     private static MapHelperClass instance;
+    private FirebaseAdminHelperClass firebaseHelper;
+
     private static final String STATIC_MAP_API_KEY = "AIzaSyDN1edvlQjSdtFq8oH3jT2msvcrbg6_EYU";
     private ImageView map;
 
     private MapHelperClass(ImageView map) {
         this.map = map;
+        firebaseHelper = new FirebaseAdminHelperClass();
     }
 
     public static MapHelperClass getInstance(ImageView map) {
@@ -49,7 +52,6 @@ public class MapHelperClass {
         int width = map.getWidth();
         int height = map.getHeight();
 
-        FirebaseAdminHelperClass firebaseHelper = new FirebaseAdminHelperClass();
         ArrayList<String> openParkingSpotsCoordinatesList = new ArrayList<>();
         ArrayList<String> openParkingSpotsNamesList = new ArrayList<>();
 
@@ -83,12 +85,12 @@ public class MapHelperClass {
                                         if (closingTime.isAfter(openingTime)) {
                                             isOpen = !now.isBefore(openingTime) && now.isBefore(closingTime);
                                         } else {
-                                            // Overnight case (e.g., 10:00 to 03:00 next day)
+                                            //overnight case for example 20:00 Friday to 01:00 Saturday
                                             isOpen = !now.isBefore(openingTime) || now.isBefore(closingTime);
                                         }
 
                                         if (!isOpen || capacitiesList.get(i).equals(currentUsersList.get(i))) {
-                                            color = "black"; // closed or full
+                                            color = "black"; //closed or full
                                         } else if (Boolean.TRUE.equals(isHandicappedList.get(i))) {
                                             color = "blue";
                                         }
@@ -143,14 +145,9 @@ public class MapHelperClass {
             return;
         }
 
-        if (!(map.getParent() instanceof ConstraintLayout)) {
-            Toast.makeText(context, "Map is not inside a ConstraintLayout", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         ConstraintLayout layout = (ConstraintLayout) map.getParent();
 
-        double centerLat = 21.3069; // For Honolulu
+        double centerLat = 21.3069; //For Honolulu
         double centerLng = -157.8583;
         int zoom = 13;
         int mapWidth = map.getWidth();
@@ -181,13 +178,13 @@ public class MapHelperClass {
                 button.setTranslationX(x - size / 2f);
                 button.setTranslationY(y - size / 2f);
 
-                final String parkingNameFinal = (parkingNamesList != null && i < parkingNamesList.size())
+                final String parkingName = (parkingNamesList != null && i < parkingNamesList.size())
                         ? parkingNamesList.get(i)
                         : "Unknown";
 
                 button.setOnClickListener(view -> {
                     Intent intent = new Intent(context, StartParkingActivity.class);
-                    intent.putExtra("parkingName", parkingNameFinal);
+                    intent.putExtra("parkingName", parkingName);
 
                     if (context instanceof android.app.Activity) {
                         context.startActivity(intent);
