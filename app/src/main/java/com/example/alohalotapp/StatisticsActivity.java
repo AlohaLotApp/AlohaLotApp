@@ -136,7 +136,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         loadUsageStatsAndShowPieChart(userId);
 
-        loadPaymentStatsAndShowBarChart(database, userId);
+        loadPaymentStatsAndShowBarChart(userId);
 
         // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -274,7 +274,7 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
-    private void loadPaymentStatsAndShowBarChart(FirebaseDatabase database, String userId) {
+    private void loadPaymentStatsAndShowBarChart(String userId) {
         DatabaseReference paymentStatsRef = database.getReference("users").child(userId).child("paymentStats");
 
         paymentStatsRef.get().addOnCompleteListener(task -> {
