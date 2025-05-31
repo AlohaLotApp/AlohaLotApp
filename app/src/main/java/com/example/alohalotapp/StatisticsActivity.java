@@ -54,6 +54,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private ProgressBar pointsProgressBar;
     private PieChart pieChart;
     private BarChart paymentBarChart;
+    private FirebaseDatabase database;
 
 
     @Override
@@ -75,6 +76,8 @@ public class StatisticsActivity extends AppCompatActivity {
         paymentBarChart = findViewById(R.id.BarChart);
         topSpotTextView = findViewById(R.id.topSpotTView);
 
+        database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
+
 
         // Create a SessionManager instance using the current context
         SessionManager sessionManager = new SessionManager(this);
@@ -82,8 +85,8 @@ public class StatisticsActivity extends AppCompatActivity {
         String userId = sessionManager.getUserId();
 
         //Connection with database
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
         DatabaseReference userRef = database.getReference("users").child(userId);
+
 
         // Loads users info
         userRef.get().addOnCompleteListener(task -> {
@@ -123,46 +126,7 @@ public class StatisticsActivity extends AppCompatActivity {
             }
         });
 
-        // Φόρτωση usageStats και εμφάνιση σε PieChart
-        DatabaseReference usageStatsRef = database.getReference("users").child(userId).child("usageStats");
-        // Φόρτωση usageStats πρώτα
-        usageStatsRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().exists()) {
-                Map<String, Integer> usageStats = new HashMap<>();
-                for (com.google.firebase.database.DataSnapshot child : task.getResult().getChildren()) {
-                    String parkingId = child.getKey();
-                    Integer countLong = child.getValue(Integer.class);
-                    int count = countLong != null ? countLong.intValue() : 0;
-                    if (parkingId != null) {
-                        usageStats.put(parkingId, count);
-                    }
-                }
-
-                // Φόρτωση ονομάτων parkingspaces
-                DatabaseReference parkingRef = database.getReference("parkingspaces");
-                parkingRef.get().addOnCompleteListener(parkingTask -> {
-                    Map<String, String> parkingNamesMap = new HashMap<>();
-
-                    if (parkingTask.isSuccessful() && parkingTask.getResult().exists()) {
-                        for (com.google.firebase.database.DataSnapshot parkingSnapshot : parkingTask.getResult().getChildren()) {
-                            String id = parkingSnapshot.getKey();
-                            String name = parkingSnapshot.child("name").getValue(String.class);
-                            if (id != null && name != null) {
-                                parkingNamesMap.put(id, name);
-                            }
-                        }
-                    } else {
-                        Toast.makeText(this, "No parking names found", Toast.LENGTH_SHORT).show();
-                    }
-
-                    // Τώρα έχεις usageStats και parkingNamesMap → κάλεσε setupPieChart
-                    setupPieChart(usageStats, parkingNamesMap);
-                });
-            } else {
-                Toast.makeText(this, "No usage stats found", Toast.LENGTH_SHORT).show();
-                pieChart.clear();
-            }
-        });
+        loadUsageStatsAndShowPieChart(userId);
 
         loadPaymentStatsAndShowBarChart(database, userId);
 
@@ -193,94 +157,104 @@ public class StatisticsActivity extends AppCompatActivity {
         return Math.max(rewardThreshold - currentPoints, 0);
     }
 
-    private void setupPieChart(Map<String, Integer> usageStats, Map<String, String> parkingNamesMap) {
-
-        pieChart.clear(); // Καθαρίζει το παλιό data
+    private void loadUsageStatsAndShowPieChart(String userId) {
+        pieChart.clear(); // clears old data
 
         SpannableString centerText = new SpannableString("Your Parking\nStats");
-
-        // Bold στην πρώτη γραμμή
+        // Bold in firtst row
         centerText.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 12, 0);
-        // Μεγαλύτερο μέγεθος για τη δεύτερη γραμμή
         centerText.setSpan(new android.text.style.RelativeSizeSpan(1.3f), 13, centerText.length(), 0);
-        // Κεντραρισμένο κείμενο (προαιρετικό)
         centerText.setSpan(new android.text.style.AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, centerText.length(), 0);
 
         pieChart.setCenterText(centerText);
-        pieChart.setCenterTextColor(Color.DKGRAY);
+        int centerTextColor = ContextCompat.getColor(this, R.color.blue);
+        pieChart.setCenterTextColor(centerTextColor);
 
-        List<PieEntry> entries = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : usageStats.entrySet()) {
-            String parkingId = entry.getKey();
-            int value = entry.getValue() != null ? entry.getValue() : 0;
-
-            if (value == 0) continue;  // Παράλειψη κομματιών με 0
-
-            String displayName = parkingNamesMap.getOrDefault(parkingId, parkingId);
-
-            entries.add(new PieEntry(value, displayName));
-            labels.add(displayName);
-        }
-
-        // Δημιουργία του dataset
-        PieDataSet dataSet = new PieDataSet(entries, "Parking Usage");
-
-        // Χρώματα για το chart και την custom legend
-        List<Integer> colors = generateColors(entries.size());
-        dataSet.setColors(colors);
-
-        PieData pieData = new PieData(dataSet);
-        pieData.setDrawValues(true);
-        pieData.setValueTextSize(16f); // 👈 μεγαλώνει το μέγεθος
-        pieData.setValueTextColor(Color.WHITE); // 👈 αν χρειάζεται για ορατότητα
-        pieData.setValueTypeface(Typeface.DEFAULT_BOLD); // 👈 προαιρετικά bold
-
-        pieData.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.valueOf((int) value);
-            }
-        });
-
-        pieChart.setData(pieData);
-
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                if (e instanceof PieEntry) {
-                    PieEntry entry = (PieEntry) e;
-                    String label = entry.getLabel();
-                    float value = entry.getValue();
-
-                    // Εδώ μπορείς να εμφανίσεις Toast ή να πας σε άλλη οθόνη
-                    Toast.makeText(getApplicationContext(), label + ": " + (int)value, Toast.LENGTH_SHORT).show();
+        DatabaseReference usageStatsRef = database.getReference("users").child(userId).child("usageStats");
+        // loads usageStats from database
+        usageStatsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                Map<String, Integer> usageStats = new HashMap<>();
+                for (com.google.firebase.database.DataSnapshot child : task.getResult().getChildren()) {
+                    String parkingName = child.getKey();
+                    Integer countLong = child.getValue(Integer.class);
+                    int count = countLong != null ? countLong.intValue() : 0;
+                    if (parkingName != null && count > 0) {
+                        usageStats.put(parkingName, count);
+                    }
                 }
+
+                List<PieEntry> entries = new ArrayList<>();
+
+                for (Map.Entry<String, Integer> entry : usageStats.entrySet()) {
+                    int value = entry.getValue() != null ? entry.getValue() : 0;
+
+                    if (value == 0) continue;  // ignores parts that are zero
+
+                    entries.add(new PieEntry(value, entry.getKey()));
+                }
+
+                // creates dataset
+                PieDataSet dataSet = new PieDataSet(entries, "Parking Usage");
+                List<Integer> colors = generateColors(entries.size());
+                dataSet.setColors(colors);
+
+                PieData pieData = new PieData(dataSet);
+                pieData.setDrawValues(true);
+                pieData.setValueTextSize(16f);
+                pieData.setValueTextColor(Color.WHITE);
+                pieData.setValueTypeface(Typeface.DEFAULT_BOLD);
+
+                pieData.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.valueOf((int) value);
+                    }
+                });
+
+                pieChart.setData(pieData);
+
+                pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                    @Override
+                    public void onValueSelected(Entry e, Highlight h) {
+                        if (e instanceof PieEntry) {
+                            PieEntry entry = (PieEntry) e;
+                            String label = entry.getLabel();
+                            float value = entry.getValue();
+
+                            Toast.makeText(getApplicationContext(), label + ": " + (int)value, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onNothingSelected() {}
+                });
+
+                List<String> labels = new ArrayList<>();
+
+                pieChart.setDrawEntryLabels(false);
+                pieChart.getDescription().setEnabled(false);
+
+                Legend legend = pieChart.getLegend();
+                legend.setEnabled(false);
+
+                RecyclerView legendRecyclerView = findViewById(R.id.legendRecyclerView);
+                legendRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+                LegendAdapter adapter = new LegendAdapter(labels, colors);
+                legendRecyclerView.setAdapter(adapter);
+
+                // Top Spot
+                String maxParkingName = findTopSpot(usageStats);
+                topSpotTextView.setText(maxParkingName);
+
+                pieChart.invalidate();
+            }
+            else {
+                Toast.makeText(this, "No usage stats found", Toast.LENGTH_SHORT).show();
+                pieChart.clear();
             }
 
-            @Override
-            public void onNothingSelected() {
-                // Optional: όταν ο χρήστης πατάει σε κενό χώρο
-            }
+
         });
-
-
-        pieChart.setDrawEntryLabels(false);
-        pieChart.getDescription().setEnabled(false);
-
-        Legend legend = pieChart.getLegend();
-        legend.setEnabled(false);
-
-        RecyclerView legendRecyclerView = findViewById(R.id.legendRecyclerView);
-        legendRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        LegendAdapter adapter = new LegendAdapter(labels, colors);
-        legendRecyclerView.setAdapter(adapter);
-
-        String maxParkingName = findTopSpot(usageStats, parkingNamesMap);
-        topSpotTextView.setText(maxParkingName);
-
-        pieChart.invalidate();
     }
 
     private void loadPaymentStatsAndShowBarChart(FirebaseDatabase database, String userId) {
@@ -370,8 +344,6 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
-
-
     private List<Integer> generateColors(int count) {
         List<Integer> colors = new ArrayList<>();
         float saturation = 0.7f; // κορεσμός (0-1)
@@ -385,22 +357,11 @@ public class StatisticsActivity extends AppCompatActivity {
         return colors;
     }
 
-    private String findTopSpot(Map<String, Integer> usageStats, Map<String, String> parkingNamesMap){
-        String maxKey = null;
-        int maxValue = Integer.MIN_VALUE;
-
-        for (Map.Entry<String, Integer> entry : usageStats.entrySet()) {
-            int value = entry.getValue() != null ? entry.getValue() : 0;
-            if (value > maxValue) {
-                maxValue = value;
-                maxKey = entry.getKey();
-            }
-        }
-
-        if (maxKey == null) {
-            return null; // Δεν υπάρχουν στοιχεία
-        }
-
-        return parkingNamesMap.getOrDefault(maxKey, maxKey);
+    private String findTopSpot(Map<String, Integer> usageStats) {
+        return usageStats.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse("No data");
     }
+
 }

@@ -115,6 +115,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                 initializeUserUsageStats(userId);
                                 initializeUserPaymentStats(userId);
+                                initializeUserOrders(userId);
 
                                 // Ξεκινάει την επόμενη δραστηριότητα (πχ αρχική οθόνη εφαρμογής)
                                 Intent intent = new Intent(SignUpActivity.this, StartActivity.class);
@@ -162,6 +163,12 @@ public class SignUpActivity extends AppCompatActivity {
         initialPaymentStats.put("Paid11", 0);
 
         paymentStatsRef.setValue(initialPaymentStats);
+    }
+
+    private void initializeUserOrders(String userId){
+        DatabaseReference userOrdersRef = rootNode.getReference("users").child(userId).child("orders");
+
+        userOrdersRef.setValue(new HashMap<>());
     }
 
 
