@@ -84,10 +84,9 @@
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/PieChart"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:minHeight="300dp"
-                android:layout_marginBottom="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -117,7 +116,7 @@
 
             <TextView
                 android:id="@+id/totalParksTView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
@@ -162,7 +161,7 @@
 
             <TextView
                 android:id="@+id/totalSpentTView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
@@ -197,7 +196,7 @@
 
             <TextView
                 android:id="@+id/totalPointsTView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:fontFamily="sans-serif-condensed-medium"
@@ -231,7 +230,7 @@
 
             <TextView
                 android:id="@+id/restPoints"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:textStyle="bold"
@@ -272,7 +271,7 @@
 
             <TextView
                 android:id="@+id/topSpotTView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
