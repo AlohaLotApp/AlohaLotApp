@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -125,20 +126,22 @@ public class SignUpActivity extends AppCompatActivity {
         DatabaseReference parkingsRef = rootNode.getReference("parkingspaces");
         DatabaseReference userUsageStatsRef = rootNode.getReference("users").child(userId).child("usageStats");
 
-        // Get all parking IDs
+        // Get all parking data
         parkingsRef.get().addOnCompleteListener(parkingTask -> {
             if (parkingTask.isSuccessful() && parkingTask.getResult().exists()) {
-                Map<String, Object> allParkings = (Map<String, Object>) parkingTask.getResult().getValue();
+                DataSnapshot parkingSnapshot = parkingTask.getResult();
 
-                if (allParkings == null) return;
-
-                // Set usage stats for each parking to 0
                 Map<String, Integer> usageStats = new HashMap<>();
-                for (String parkingId : allParkings.keySet()) {
-                    usageStats.put(parkingId, 0);
+
+                for (DataSnapshot parkingEntry : parkingSnapshot.getChildren()) {
+                    String parkingName = parkingEntry.child("name").getValue(String.class);
+
+                    if (parkingName != null) {
+                        usageStats.put(parkingName, 0);
+                    }
                 }
 
-                // Save usage stats to user
+                // Save usage stats with parking names as keys
                 userUsageStatsRef.setValue(usageStats);
             }
         });
