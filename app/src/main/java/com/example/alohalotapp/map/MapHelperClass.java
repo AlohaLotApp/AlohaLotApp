@@ -9,8 +9,11 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.alohalotapp.SessionManager;
 import com.example.alohalotapp.StartParkingActivity;
 import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
+import com.example.alohalotapp.orders.OrderHelperClass;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.time.LocalTime;
@@ -23,12 +26,14 @@ public class MapHelperClass {
     private static MapHelperClass instance;
     private FirebaseAdminHelperClass firebaseHelper;
 
+    private OrderHelperClass orderHelper;
     private static final String STATIC_MAP_API_KEY = "AIzaSyDN1edvlQjSdtFq8oH3jT2msvcrbg6_EYU";
     private ImageView map;
 
     private MapHelperClass(ImageView map) {
         this.map = map;
         firebaseHelper = new FirebaseAdminHelperClass();
+        orderHelper = orderHelper.getInstance();
     }
 
     public static MapHelperClass getInstance(ImageView map) {
@@ -43,7 +48,7 @@ public class MapHelperClass {
         this.map = map;
     }
 
-    public void addMarkers(Context context) {
+    public void addMarkers(Context context, FirebaseDatabase database) {
         if (map == null || map.getWidth() == 0 || map.getHeight() == 0) {
             System.out.println("Map not ready yet!");
             return;
@@ -73,6 +78,7 @@ public class MapHelperClass {
                                 ));
 
                                 LocalTime now = LocalTime.now();
+                                orderHelper.checkExpiredOrdersForAllUsers(context, database);
 
                                 for (int i = 0; i < size; i++) {
                                     String color = "red"; // default

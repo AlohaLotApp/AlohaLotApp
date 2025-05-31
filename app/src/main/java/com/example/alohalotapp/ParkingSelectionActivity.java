@@ -11,12 +11,15 @@ import android.widget.ImageView;
 import com.example.alohalotapp.admin.FirebaseAdminHelperClass;
 import com.example.alohalotapp.map.MapHelperClass;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ParkingSelectionActivity extends AppCompatActivity {
     private FirebaseAdminHelperClass firebaseHelper;
     private MapHelperClass mapHelper;
 
     private String userEmail;
+
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,8 @@ public class ParkingSelectionActivity extends AppCompatActivity {
         firebaseHelper = new FirebaseAdminHelperClass();
         mapHelper = MapHelperClass.getInstance(map);
 
+        database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
+
         Intent intentStart = getIntent();
         if (intentStart != null) {
             userEmail = intentStart.getStringExtra("userEmail");
@@ -38,7 +43,7 @@ public class ParkingSelectionActivity extends AppCompatActivity {
             public void onGlobalLayout() {
                 map.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                mapHelper.addMarkers(ParkingSelectionActivity.this);
+                mapHelper.addMarkers(ParkingSelectionActivity.this, database);
             }
         });
 
@@ -47,6 +52,6 @@ public class ParkingSelectionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mapHelper.addMarkers(ParkingSelectionActivity.this);
+        mapHelper.addMarkers(ParkingSelectionActivity.this, database);
     }
 }
