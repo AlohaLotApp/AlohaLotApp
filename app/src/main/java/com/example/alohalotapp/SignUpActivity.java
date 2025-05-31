@@ -86,7 +86,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 // Create user object
-                UserHelperClass helperClass = new UserHelperClass(email, password, 100, 0.0, 0);
+                UserHelperClass helperClass = new UserHelperClass(email, password, 0, 0.0, 0);
 
                 // Count existing users
                 reference.get().addOnCompleteListener(task -> {
