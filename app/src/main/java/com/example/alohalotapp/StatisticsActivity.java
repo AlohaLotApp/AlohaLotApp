@@ -56,6 +56,9 @@ public class StatisticsActivity extends AppCompatActivity {
     private BarChart paymentBarChart;
     private FirebaseDatabase database;
 
+    private LegendAdapter legendAdapter;
+    private RecyclerView legendRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,11 @@ public class StatisticsActivity extends AppCompatActivity {
         pieChart = findViewById(R.id.PieChart);
         paymentBarChart = findViewById(R.id.BarChart);
         topSpotTextView = findViewById(R.id.topSpotTView);
+        legendRecyclerView = findViewById(R.id.legendRecyclerView);
+        legendRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        legendAdapter = new LegendAdapter(new ArrayList<>(), new ArrayList<>());
+        legendRecyclerView.setAdapter(legendAdapter);
+
 
         database = FirebaseDatabase.getInstance("https://alohalot-e2fd9-default-rtdb.asia-southeast1.firebasedatabase.app/");
 
@@ -184,19 +192,29 @@ public class StatisticsActivity extends AppCompatActivity {
                     }
                 }
 
+
+
                 List<PieEntry> entries = new ArrayList<>();
+                List<String> labels = new ArrayList<>();
+
 
                 for (Map.Entry<String, Integer> entry : usageStats.entrySet()) {
                     int value = entry.getValue() != null ? entry.getValue() : 0;
 
-                    if (value == 0) continue;  // ignores parts that are zero
+                    if (value == 0) continue;
 
                     entries.add(new PieEntry(value, entry.getKey()));
+                    labels.add(entry.getKey());
                 }
+
+                List<Integer> colors = generateColors(entries.size());
+                legendAdapter = new LegendAdapter(labels, colors);
+                legendRecyclerView.setAdapter(legendAdapter);
+
 
                 // creates dataset
                 PieDataSet dataSet = new PieDataSet(entries, "Parking Usage");
-                List<Integer> colors = generateColors(entries.size());
+
                 dataSet.setColors(colors);
 
                 PieData pieData = new PieData(dataSet);
@@ -229,8 +247,6 @@ public class StatisticsActivity extends AppCompatActivity {
                     public void onNothingSelected() {}
                 });
 
-                List<String> labels = new ArrayList<>();
-
                 pieChart.setDrawEntryLabels(false);
                 pieChart.getDescription().setEnabled(false);
 
@@ -245,6 +261,7 @@ public class StatisticsActivity extends AppCompatActivity {
                 // Top Spot
                 String maxParkingName = findTopSpot(usageStats);
                 topSpotTextView.setText(maxParkingName);
+
 
                 pieChart.invalidate();
             }
