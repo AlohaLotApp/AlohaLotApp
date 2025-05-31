@@ -266,9 +266,9 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 List<BarEntry> entries = new ArrayList<>();
 
-                // Νέα κλειδιά από τη βάση
+                // new keys from database
                 String[] paymentKeys = {"Paid3", "Paid5", "Paid11"};
-                // Εμφανιζόμενα labels στον άξονα
+                // labels
                 String[] paymentLabels = {"3", "5", "11"};
 
                 for (int i = 0; i < paymentKeys.length; i++) {
@@ -281,7 +281,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 BarDataSet dataSet = new BarDataSet(entries, "Payments");
 
-// Ορισμός διαφορετικών χρωμάτων για κάθε μπάρα
+                //different color for every bar
                 dataSet.setColors(new int[]{
                         ContextCompat.getColor(this, R.color.color1),
                         ContextCompat.getColor(this, R.color.color2),
@@ -289,12 +289,12 @@ public class StatisticsActivity extends AppCompatActivity {
                 });
 
                 BarData barData = new BarData(dataSet);
-                barData.setBarWidth(0.5f); // μία μπάρα ανά θέση
+                barData.setBarWidth(0.5f);
 
                 paymentBarChart.setData(barData);
-                barData.setValueTextSize(16f); // ή μεγαλύτερο π.χ. 18f, 20f ανάλογα με το πόσο μεγάλες θέλεις τις τιμές
-                barData.setValueTypeface(Typeface.DEFAULT_BOLD); // προαιρετικά, για πιο έντονα νούμερα
-                barData.setValueTextColor(Color.BLACK); // ή άλλο χρώμα που φαίνεται καλά
+                barData.setValueTextSize(16f);
+                barData.setValueTypeface(Typeface.DEFAULT_BOLD);
+                barData.setValueTextColor(Color.BLACK);
                 paymentBarChart.setFitBars(true);
                 paymentBarChart.getDescription().setEnabled(false);
 
@@ -306,13 +306,13 @@ public class StatisticsActivity extends AppCompatActivity {
                 xAxis.setDrawGridLines(false);
                 xAxis.setDrawAxisLine(true);
 
-// Κεντράρισμα των labels κάτω από τις μπάρες
+                //centers the labels under the bars
                 xAxis.setAxisMinimum(-0.5f);
                 xAxis.setAxisMaximum(paymentLabels.length - 0.5f);
                 barData.setValueFormatter(new ValueFormatter() {
                     @Override
                     public String getFormattedValue(float value) {
-                        return String.valueOf((int) value); // αφαιρεί τα δεκαδικά
+                        return String.valueOf((int) value);
                     }
                 });
 
@@ -330,8 +330,6 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 xAxis.setTextSize(14f);
 
-
-// Y Axis ρυθμίσεις
                 paymentBarChart.getAxisLeft().setGranularity(1f);
                 paymentBarChart.getAxisLeft().setGranularityEnabled(true);
                 paymentBarChart.getAxisRight().setEnabled(false);
@@ -346,11 +344,11 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private List<Integer> generateColors(int count) {
         List<Integer> colors = new ArrayList<>();
-        float saturation = 0.7f; // κορεσμός (0-1)
-        float lightness = 0.6f;  // φωτεινότητα (0-1)
+        float saturation = 0.7f;
+        float lightness = 0.6f;
 
         for (int i = 0; i < count; i++) {
-            float hue = (360f / count) * i;  // Ομοιόμορφη κατανομή στον χρωματικό κύκλο
+            float hue = (360f / count) * i;
             int color = Color.HSVToColor(new float[]{hue, saturation, lightness});
             colors.add(color);
         }
