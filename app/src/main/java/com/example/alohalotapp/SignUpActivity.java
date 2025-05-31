@@ -91,7 +91,7 @@ public class SignUpActivity extends AppCompatActivity {
                     regConfirm.setError(null);
                 }
 
-                // Δημιουργεί ένα αντικείμενο UserHelperClass με το email και password για αποθήκευση
+                // Δ=ημιουργεί ένα αντικείμενο UserHelperClass με το email και password για αποθήκευση
                 UserHelperClass helperClass = new UserHelperClass(email, password, 0, 0.0, 0);
 
                 // Παίρνει όλα τα δεδομένα από το "users" για να μετρήσει πόσοι χρήστες υπάρχουν ήδη
