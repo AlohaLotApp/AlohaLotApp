@@ -55,10 +55,8 @@ public class StatisticsActivity extends AppCompatActivity {
     private PieChart pieChart;
     private BarChart paymentBarChart;
     private FirebaseDatabase database;
-
     private LegendAdapter legendAdapter;
     private RecyclerView legendRecyclerView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,5 +1,7 @@
 package com.example.alohalotapp;
 
+import static android.view.View.GONE;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -68,6 +70,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         payButton.setOnClickListener(v -> {
             if (balance >= amountToPay) {
+                payButton.setVisibility(GONE);
                 balance -= amountToPay;
                 saveBalance();
                 balanceText.setText("Your balance: " + balance + " $");
