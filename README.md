@@ -19,7 +19,7 @@ AlohaLot is a university group project that delivers a smart parking management 
 
 ## Tech Stack
 - **Android Studio Electric Eel (2022.1.1)**
-- **Java / Kotlin**
+- **Java**
 - **Firebase Authentication & Realtime Database**
 
 ## Setup Instructions
