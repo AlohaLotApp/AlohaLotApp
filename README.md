@@ -33,7 +33,7 @@ AlohaLot is a university group project that delivers a smart parking management 
    - **Password**: `1`
 
 ## Team Members
-- Vasileios Raphail Avramidis
+- Vasileios Rafail Avramidis
 - Aikaterini Argyriou
 - Andreas Demirtzoglou
 - Stefania Thessalonikiou 
