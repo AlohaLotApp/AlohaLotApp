@@ -38,7 +38,7 @@ AlohaLot is a university group project that delivers a smart parking management 
 - Andreas Demirtzoglou
 - Stefania Thessalonikiou 
 - Kiriaki-Maria Kadrefi 
-- Efstathios-Raphael Mystakidis 
+- Rafail Efstathios Mystakidis 
 
 ## License
 This project was created as part of a university course and is intended for academic use.
